@@ -19,9 +19,10 @@ public class AssignmentEntity {
 
     }
 
-    public AssignmentEntity(String name, Date date, CourseEntity courseEntity) {
+    public AssignmentEntity(String name, Date date, String description, CourseEntity courseEntity) {
         this.name = name;
         this.date = date;
+        this.description = description;
         this.courseEntity = courseEntity;
     }
 

@@ -1,14 +1,14 @@
 package com.example.assignmentapp.service;
 
-import com.example.assignmentapp.dto.CourseFormCreate;
+import com.example.assignmentapp.dto.CourseFormCreateDto;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.EntityNotFoundException;
 import com.example.assignmentapp.exceptions.UserException;
-import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.repositories.ICourseRepository;
 import com.example.assignmentapp.util.IAuthenticationFacade;
+import com.example.assignmentapp.util.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +45,15 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseEntity createCourse(CourseFormCreate courseFormCreate) throws EntityNotFoundException, CourseException, UserException {
+    public CourseEntity createCourse(CourseFormCreateDto courseFormCreate) throws EntityNotFoundException, CourseException, UserException {
+
+        //recuperer le user actuellement connecte
+        UserIdentity authIdUser = authenticationFacade.getUser();
 
         //recuperer l'id de l'user qui a ete passe dans le formulaire de creation de matiere
         UserEntity user = userService.getUserById(courseFormCreate.getIdUser());
 
-        if(user == null){
+        if(user.getIduser() != authIdUser.getIduser()){
             throw new EntityNotFoundException();
         }
 
@@ -65,7 +68,7 @@ public class CourseService {
             throw new CourseException();
         }
 
-        return courseRepository.save(new CourseEntity(courseFormCreate.getName(), user));
+        return courseRepository.save(new CourseEntity(courseFormCreate.getName(), user, courseFormCreate.getDescription()));
     }
 
     @Transactional

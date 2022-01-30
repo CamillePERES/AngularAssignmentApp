@@ -1,6 +1,5 @@
 package com.example.assignmentapp;
 
-import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.model.UserRoleEntity;
 import com.example.assignmentapp.service.UserService;
@@ -8,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @SpringBootApplication
 public class AssignmentAppApplication implements CommandLineRunner {

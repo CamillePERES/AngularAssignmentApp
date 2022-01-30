@@ -1,6 +1,6 @@
 package com.example.assignmentapp.dto;
 
-public class WorkFormCreate {
+public class WorkFormCreateDto {
 
     private String name;
     private String description;

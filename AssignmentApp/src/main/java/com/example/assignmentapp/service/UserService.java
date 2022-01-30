@@ -1,7 +1,7 @@
 package com.example.assignmentapp.service;
 
-import com.example.assignmentapp.dto.LoginForm;
-import com.example.assignmentapp.dto.LoginResult;
+import com.example.assignmentapp.dto.LoginFormDto;
+import com.example.assignmentapp.dto.LoginResultDto;
 import com.example.assignmentapp.exceptions.CustomException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserEntity;
@@ -67,7 +67,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public LoginResult signIn(LoginForm loginForm) {
+    public LoginResultDto signIn(LoginFormDto loginForm) {
 
         String login = loginForm.getLogin();
 
@@ -79,7 +79,7 @@ public class UserService {
         }
     }
 
-    public LoginResult refresh(String login) {
+    public LoginResultDto refresh(String login) {
         return jwtTokenProvider.createToken(login, userRepository.getUserByLogin(login).getRole());
     }
 

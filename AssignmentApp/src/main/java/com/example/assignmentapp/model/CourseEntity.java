@@ -13,9 +13,10 @@ public class CourseEntity {
     private Collection<AssignmentEntity> assignments;
     private UserEntity userEntity;
 
-    public CourseEntity(String name, UserEntity userEntity) {
+    public CourseEntity(String name, UserEntity userEntity, String description) {
         this.name = name;
         this.userEntity = userEntity;
+        this.description = description;
     }
 
     public CourseEntity(){

@@ -1,7 +1,5 @@
 package com.example.assignmentapp.model;
 
-import org.apache.catalina.User;
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;

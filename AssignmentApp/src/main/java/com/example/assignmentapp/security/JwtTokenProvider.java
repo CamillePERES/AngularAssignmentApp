@@ -1,12 +1,11 @@
 package com.example.assignmentapp.security;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import com.example.assignmentapp.dto.LoginResult;
+import com.example.assignmentapp.dto.LoginResultDto;
 import com.example.assignmentapp.exceptions.CustomException;
 import com.example.assignmentapp.model.UserRoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class JwtTokenProvider {
   private String secretKey;
 
   @Value("${security.jwt.token.expire-length:3600000}")
-  private long validityInMilliseconds = 3600000; // 1h
+  private long validityInMilliseconds = 36000000; // 1h
 
   @Autowired
   private MyUserDetails myUserDetails;
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
     secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
   }
 
-  public LoginResult createToken(String login, String appUserRoles) {
+  public LoginResultDto createToken(String login, String appUserRoles) {
 
     List<SimpleGrantedAuthority> roles = List.of(new SimpleGrantedAuthority[]{
       new SimpleGrantedAuthority(UserRoleEntity.valueOf(appUserRoles).getAuthority())
@@ -62,7 +61,7 @@ public class JwtTokenProvider {
         .signWith(SignatureAlgorithm.HS256, secretKey)//
         .compact();
 
-    LoginResult loginResult = new LoginResult();
+    LoginResultDto loginResult = new LoginResultDto();
     loginResult.setToken(token);
     loginResult.setExpireAt(validity.getTime());
 

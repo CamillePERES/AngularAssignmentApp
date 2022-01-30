@@ -1,18 +1,20 @@
 package com.example.assignmentapp.controller;
 
-import com.example.assignmentapp.dto.LoginForm;
-import com.example.assignmentapp.dto.LoginResult;
+import com.example.assignmentapp.dto.LoginFormDto;
+import com.example.assignmentapp.dto.LoginResultDto;
+import com.example.assignmentapp.dto.UserDto;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.service.UserService;
 import com.example.assignmentapp.util.IAuthenticationFacade;
+import com.example.assignmentapp.util.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import javax.annotation.security.RolesAllowed;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -25,24 +27,33 @@ public class UsersController extends BaseController{
     UserService userService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('TEACHER')")
-    public ResponseEntity<List<UserEntity>> getAllUsers(){
-            return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+    //@RolesAllowed("TEACHER")
+    @PreAuthorize("hasAuthority('TEACHER')")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        return tryHandle(() -> {
+            List<UserDto> listUs = userService.getAllUser()
+                    .stream()
+                    .map(us -> new UserDto(us))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(listUs, HttpStatus.OK);
+        });
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUser(@PathVariable("id") int id){
+    //@RolesAllowed("TEACHER")
+    @PreAuthorize("hasAuthority('TEACHER')")
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") int id){
         return tryHandle(() -> {
             UserEntity user = userService.getUserById(id);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(new UserDto(user), HttpStatus.OK);
         });
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserEntity userEntity) {
         return tryHandle(() -> {
             UserEntity userCreated = userService.createUser(userEntity);
-            return new ResponseEntity<>(userCreated, HttpStatus.OK);
+            return new ResponseEntity<>(new UserDto(userCreated), HttpStatus.OK);
         });
     }
 
@@ -52,25 +63,27 @@ public class UsersController extends BaseController{
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<LoginResult> login(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<LoginResultDto> login(@RequestBody LoginFormDto loginForm) {
         return tryHandle(() -> {
-            LoginResult result = userService.signIn(loginForm);
+            LoginResultDto result = userService.signIn(loginForm);
             return new ResponseEntity<>(result, HttpStatus.OK);
         });
     }
 
     @GetMapping("/refresh")
-    @RolesAllowed({"TEACHER", "STUDENT"})
-    public ResponseEntity<LoginResult> refresh() {
+    //@RolesAllowed({"TEACHER", "STUDENT"})
+    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    public ResponseEntity<LoginResultDto> refresh() {
         return tryHandle(() -> {
-            LoginResult result = userService.refresh(this.authenticationFacade.getUser().getLogin());;
+            LoginResultDto result = userService.refresh(this.authenticationFacade.getUser().getLogin());;
             return new ResponseEntity<>(result, HttpStatus.OK);
         });
     }
 
     @GetMapping(value = "/me")
-    @RolesAllowed({"TEACHER", "STUDENT"})
-    public ResponseEntity<UserEntity> whoami() {
+    //@RolesAllowed({"TEACHER", "STUDENT"})
+    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    public ResponseEntity<UserIdentity> whoAmI() {
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));
     }
 

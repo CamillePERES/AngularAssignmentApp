@@ -1,6 +1,6 @@
 package com.example.assignmentapp.dto;
 
-public class LoginForm {
+public class LoginFormDto {
 
     private String login;
     private String password;

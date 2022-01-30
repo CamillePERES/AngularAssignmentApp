@@ -1,16 +1,19 @@
 package com.example.assignmentapp.controller;
 
-import com.example.assignmentapp.dto.WorkFormCreate;
-import com.example.assignmentapp.dto.WorkFormEvaluation;
+import com.example.assignmentapp.dto.WorkDto;
+import com.example.assignmentapp.dto.WorkFormCreateDto;
+import com.example.assignmentapp.dto.WorkFormEvaluationDto;
 import com.example.assignmentapp.model.WorkEntity;
 import com.example.assignmentapp.service.WorkService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/works")
@@ -20,35 +23,51 @@ public class WorksController extends BaseController {
     WorkService workService;
 
     @GetMapping()
-    public ResponseEntity<List<WorkEntity>> getAllWorks() {
-        return new ResponseEntity<>(workService.getAllWork(), HttpStatus.OK);
+    //@RolesAllowed({"TEACHER", "STUDENT"})
+    //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    public ResponseEntity<List<WorkDto>> getAllWorks() {
+        return tryHandle(() -> {
+            List<WorkDto> listWk = workService.getAllWork()
+                    .stream()
+                    .map(wk -> new WorkDto(wk))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(listWk, HttpStatus.OK);
+        });
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WorkEntity> getWork(@PathVariable("id") int id) {
+    //@RolesAllowed({"TEACHER", "STUDENT"})
+    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    public ResponseEntity<WorkDto> getWork(@PathVariable("id") int id) {
         return tryHandle(() -> {
             WorkEntity work = workService.getWorkById(id);
-            return new ResponseEntity<>(work, HttpStatus.OK);
+            return new ResponseEntity<>(new WorkDto(work), HttpStatus.OK);
         });
     }
 
     @PostMapping()
-    public ResponseEntity<WorkEntity> createWork(@RequestBody WorkFormCreate workFormCreate) {
+    //@RolesAllowed("STUDENT")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public ResponseEntity<WorkDto> createWork(@RequestBody WorkFormCreateDto workFormCreateDto) {
         return tryHandle(() -> {
-            WorkEntity workCreated = workService.createWork(workFormCreate);
-            return new ResponseEntity<>(workCreated, HttpStatus.OK);
+            WorkEntity workCreated = workService.createWork(workFormCreateDto);
+            return new ResponseEntity<>(new WorkDto(workCreated), HttpStatus.OK);
         });
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<WorkEntity> updateWorkForEvaluation(@RequestBody WorkFormEvaluation workFormEvaluation){
+    @PutMapping()
+    //@RolesAllowed("TEACHER")
+    @PreAuthorize("hasAuthority('TEACHER')")
+    public ResponseEntity<WorkDto> updateWorkForEvaluation(@RequestBody WorkFormEvaluationDto workFormEvaluation){
         return tryHandle(() -> {
             WorkEntity workEvaluated = workService.updateWorkForEvaluation(workFormEvaluation);
-            return new ResponseEntity<>(workEvaluated, HttpStatus.OK);
+            return new ResponseEntity<>(new WorkDto(workEvaluated), HttpStatus.OK);
         });
-    }*/
+    }
 
     @DeleteMapping("/{id}")
+    //@RolesAllowed("STUDENT")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public void deleteWork(@PathVariable("id") int id) {
         workService.deleteWorkById(id);
     }

@@ -1,11 +1,10 @@
 package com.example.assignmentapp.dto;
 
-public class WorkFormEvaluation {
+public class WorkFormEvaluationDto {
 
     private int idWork;
     private int grade;
     private String comment;
-    private int idUser;
 
     public int getIdWork() {
         return idWork;

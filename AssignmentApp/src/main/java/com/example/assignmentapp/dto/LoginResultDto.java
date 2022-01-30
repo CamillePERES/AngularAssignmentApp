@@ -1,6 +1,6 @@
 package com.example.assignmentapp.dto;
 
-public class LoginResult {
+public class LoginResultDto {
 
     private String token;
     private long expireAt;
