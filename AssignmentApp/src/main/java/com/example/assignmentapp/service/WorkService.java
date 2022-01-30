@@ -69,7 +69,7 @@ public class WorkService {
         return workRepository.save(new WorkEntity(workFormCreate.getName(), workFormCreate.getDescription(), 0, "",  EnumWorkStatus.Submitted.name(), user, assignment));
     }
 
-    @Transactional
+    /*@Transactional
     public WorkEntity updateWorkForEvaluation(WorkFormEvaluation workFormEvaluation) throws WorkException, EntityNotFoundException {
 
         WorkEntity wk = this.getWorkById(workFormEvaluation.getIdWork());
@@ -83,7 +83,7 @@ public class WorkService {
         //si true (ce sont les memes), update les champs status, comment, grade (workformevaluation)
         //si false, renvoie une exception
 
-    }
+    }*/
 
     @Transactional
     public void deleteWorkById(Integer id){

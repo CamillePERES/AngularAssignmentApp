@@ -8,6 +8,7 @@ import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.repositories.ICourseRepository;
+import com.example.assignmentapp.util.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class CourseService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
 
     public List<CourseEntity> getAllCourses() {
         return courseRepository.findAll();

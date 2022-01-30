@@ -10,4 +10,5 @@ public interface IUserRepository extends JpaRepository<UserEntity, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM user u  WHERE u.login = :login LIMIT 1")
     UserEntity getUserByLogin(@Param("login") String login);
 
+    boolean existsByLogin(String login);
 }

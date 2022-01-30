@@ -40,13 +40,13 @@ public class WorksController extends BaseController {
         });
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<WorkEntity> updateWorkForEvaluation(@RequestBody WorkFormEvaluation workFormEvaluation){
         return tryHandle(() -> {
             WorkEntity workEvaluated = workService.updateWorkForEvaluation(workFormEvaluation);
             return new ResponseEntity<>(workEvaluated, HttpStatus.OK);
         });
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public void deleteWork(@PathVariable("id") int id) {
