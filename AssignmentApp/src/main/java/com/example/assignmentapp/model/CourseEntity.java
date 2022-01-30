@@ -9,6 +9,7 @@ import java.util.Objects;
 public class CourseEntity {
     private int idcourse;
     private String name;
+    private String description;
     private Collection<AssignmentEntity> assignments;
     private UserEntity userEntity;
 
@@ -40,6 +41,16 @@ public class CourseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

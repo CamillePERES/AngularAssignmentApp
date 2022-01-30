@@ -10,6 +10,7 @@ import java.util.Objects;
 public class AssignmentEntity {
     private int idass;
     private String name;
+    private String description;
     private Date date;
     private CourseEntity courseEntity;
     private Collection<WorkEntity> works;
@@ -43,6 +44,16 @@ public class AssignmentEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Basic
