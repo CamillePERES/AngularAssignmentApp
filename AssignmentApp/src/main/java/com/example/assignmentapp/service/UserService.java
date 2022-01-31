@@ -7,6 +7,7 @@ import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.repositories.IUserRepository;
 import com.example.assignmentapp.security.JwtTokenProvider;
+import com.example.assignmentapp.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,9 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -81,6 +87,20 @@ public class UserService {
 
     public LoginResultDto refresh(String login) {
         return jwtTokenProvider.createToken(login, userRepository.getUserByLogin(login).getRole());
+    }
+
+    public RedirectView savePicUser(UserEntity user, MultipartFile multipartFile) throws IOException {
+
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        user.setPicture(fileName);
+
+        UserEntity savedUser = userRepository.save(user);
+        String uploadDir = "user-pictures/" + savedUser.getIduser();
+
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        return new RedirectView("/pictures", true);
+
     }
 
 }

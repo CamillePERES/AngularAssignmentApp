@@ -3,6 +3,7 @@ package com.example.assignmentapp.controller;
 import com.example.assignmentapp.dto.LoginFormDto;
 import com.example.assignmentapp.dto.LoginResultDto;
 import com.example.assignmentapp.dto.UserDto;
+import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.service.UserService;
 import com.example.assignmentapp.util.IAuthenticationFacade;
@@ -11,8 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,6 +90,11 @@ public class UsersController extends BaseController{
     @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
     public ResponseEntity<UserIdentity> whoAmI() {
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));
+    }
+
+    @PostMapping(value="/savePic")
+    public RedirectView savePicUser(UserEntity user, @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+        return userService.savePicUser(user, multipartFile);
     }
 
 }

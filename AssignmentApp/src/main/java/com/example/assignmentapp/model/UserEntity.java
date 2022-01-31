@@ -13,6 +13,7 @@ public class UserEntity {
     private String login;
     private String password;
     private String role;
+    private String picture;
     private Collection<CourseEntity> courses;
     private Collection<WorkEntity> works;
 
@@ -92,6 +93,16 @@ public class UserEntity {
         this.role = role;
     }
 
+    @Basic
+    @Column(name = "picture")
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,5 +132,13 @@ public class UserEntity {
 
     public void setWorks(Collection<WorkEntity> works) {
         this.works = works;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (picture == null){
+            return null;
+        }
+        return "/user-picture/" + iduser + "/" + picture;
     }
 }

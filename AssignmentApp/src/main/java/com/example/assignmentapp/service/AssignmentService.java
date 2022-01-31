@@ -9,9 +9,13 @@ import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.repositories.IAssignmentRepository;
 import com.example.assignmentapp.util.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +91,19 @@ public class AssignmentService {
     @Transactional
     public void deleteAssignmentById(Integer id) {
         assignmentRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<AssignmentEntity> getAllAssignmentsPagination(Integer pageNo, Integer pageSize) {
+
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+
+        Page<AssignmentEntity> pagedResult = assignmentRepository.findAll(paging);
+
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
     }
 }
