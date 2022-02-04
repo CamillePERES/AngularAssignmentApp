@@ -1,0 +1,48 @@
+<div class="h-100 d-flex justify-content-center">
+  <div class="row align-self-center">
+    <div class="mx-auto col-md-12 card  d-flex  justify-content-center text-center">
+      <mat-card class="box display:flex flex-direction: column">
+        <mat-card-header>
+          <mat-card-title>Register</mat-card-title>
+        </mat-card-header>
+
+        <form class="card-container"
+        ngForm #signUpNgForm>
+          <mat-card-content>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="First name" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Last name" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Username" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Password" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Select a role</mat-label>
+              <mat-select>
+                <mat-option>None</mat-option>
+                <mat-option value="student">Student</mat-option>
+                <mat-option value="teacher">Teacher</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <input type="file">
+
+          </mat-card-content>
+          <button mat-stroked-button [color]="'accent'" class="btn-block"
+          (click) = "signUp()">
+            Register
+          </button>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+</div>
