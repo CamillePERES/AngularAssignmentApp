@@ -5,7 +5,7 @@ CREATE TABLE user(
         login    Varchar (500) NOT NULL ,
         password Varchar (500) NOT NULL ,
         role     Varchar (500) NOT NULL ,
-        picture Varchar (64) NOT NULL
+        picture Varchar (64)
 	,CONSTRAINT user_PK PRIMARY KEY (iduser)
 )ENGINE=InnoDB;
 
@@ -56,11 +56,4 @@ create unique index work_iduser_idass_unique
   on user 
   (
     login
-  );
-
-  create unique index nomass_idass_idmat_unique
-  on assignment
-  (
-    idass
-    ,idmat
   );

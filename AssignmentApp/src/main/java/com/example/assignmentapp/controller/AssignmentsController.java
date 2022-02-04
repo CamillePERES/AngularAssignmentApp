@@ -2,6 +2,8 @@ package com.example.assignmentapp.controller;
 
 
 import com.example.assignmentapp.dto.AssignmentDto;
+import com.example.assignmentapp.dto.AssignmentFormUpdateDto;
+import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.dto.AssignmentFormCreateDto;
 import com.example.assignmentapp.service.AssignmentService;
@@ -60,6 +62,15 @@ public class AssignmentsController extends BaseController {
     @PreAuthorize("hasAuthority('TEACHER')")
     public void deleteAssignment(@PathVariable("id") int id) {
         assignmentService.deleteAssignmentById(id);
+    }
+
+    @PutMapping()
+    @PreAuthorize("hasAuthority('TEACHER')")
+    public ResponseEntity<AssignmentDto> updateAssignment(@RequestBody AssignmentFormUpdateDto assignmentFormUpdateDto){
+        return tryHandle(() -> {
+            AssignmentEntity assignmentModified = assignmentService.updateAssignment(assignmentFormUpdateDto);
+            return new ResponseEntity<>(new AssignmentDto(assignmentModified), HttpStatus.OK);
+        });
     }
 
     @GetMapping(value="/search")

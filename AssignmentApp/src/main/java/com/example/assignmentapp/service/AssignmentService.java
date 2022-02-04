@@ -1,6 +1,8 @@
 package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.AssignmentFormCreateDto;
+import com.example.assignmentapp.dto.AssignmentFormUpdateDto;
+import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.EntityNotFoundException;
@@ -86,6 +88,18 @@ public class AssignmentService {
                 assignmentFormCreate.getDescription(),
                 course
         ));
+    }
+
+    @Transactional
+    public AssignmentEntity updateAssignment(AssignmentFormUpdateDto assignmentFormUpdateDto) throws EntityNotFoundException {
+
+        AssignmentEntity ass = this.getAssigmentById(assignmentFormUpdateDto.getIdAss());
+
+        if(ass == null){
+            throw new EntityNotFoundException();
+        }
+
+        return assignmentRepository.save(new AssignmentFormUpdateResultDto(assignmentFormUpdateDto.getName(), assignmentFormUpdateDto.getDate(), assignmentFormUpdateDto.getDescription()));
     }
 
     @Transactional
