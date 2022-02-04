@@ -22,12 +22,16 @@ export class AuthUtils
         // Get the expiration date
         const date = this._getTokenExpirationDate(token);
 
+        console.log(date)
+
         offsetSeconds = offsetSeconds || 0;
 
         if ( date === null )
         {
             return true;
         }
+
+        console.log(date.valueOf(), new Date().valueOf() + offsetSeconds * 1000)
 
         // Check if the token is expired
         return !(date.valueOf() > new Date().valueOf() + offsetSeconds * 1000);

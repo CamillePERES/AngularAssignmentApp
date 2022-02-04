@@ -2,36 +2,37 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
+import { BaseApiService } from "../base/baseapi.service";
+import { IdentityService } from "../identity/identity.service";
 import { LoginResult, LoginForm, User } from "./user.type";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService
+export class UserService extends BaseApiService
 {
 
-  key: string = "token";
+  private key: string = "token";
 
-  constructor(private http: HttpClient, protected toast: ToastrService)
+  constructor(
+    http: HttpClient,
+    toast: ToastrService,
+    private identityService: IdentityService
+    )
   {
-
+    super(http, toast);
   }
 
   public async loginAsync(form: LoginForm) : Promise<void>{
-    try{
-      const result = await this.http.post<LoginResult>(`${environment.apiBaseUrl}/users/signin`, form).toPromise();
 
-      if(result === undefined){
-        console.log("nul");
-        return;
-      }
+    const result = await this.tryPost<LoginForm, LoginResult>(`/users/signin`, form).toPromise();
 
-      this.setLocalStorage('loginresult', result);
-      this.toast.success("Login successfull");
+    if(result === undefined){
+      return;
     }
-    catch(error: any){
-        this.toast.error("Invalid credentials","Login");
-    }
+
+    this.setLocalStorage(this.key, result);
+    await this.getIdentityAsync();
   }
 
 
@@ -49,18 +50,6 @@ export class UserService
 
   public async logOut(): Promise<void>{
     this.removeFromLocalStorage(this.key);
-  }
-
-  public login(form: LoginForm) : void{
-      this.http.post<LoginResult>(`${environment.apiBaseUrl}/users/signin`, form)
-        .subscribe(
-          (result: LoginResult) => {
-            this.setLocalStorage('loginresult', result);
-          },
-          (error: any) => {
-            this.toast.error("Invalid credentials","Login");
-          }
-        );
   }
 
   public getAuthentication(): LoginResult | null{
@@ -91,6 +80,39 @@ export class UserService
   }
 
   private removeFromLocalStorage(key: string): void {
-    localStorage.removeItem(key)
+    localStorage.removeItem(key);
+    this.identityService.identity = null;
+  }
+
+  public async isAuthenticatedAsync(): Promise<boolean> {
+
+    const auth = this.getAuthentication();
+
+    console.log(auth)
+
+    //if no authentication object store, not login
+    if (auth === null) {
+      return false;
+    }
+
+    const currentTime = Date.now();
+
+    //if jwt token exist and expiration is valid
+    if (auth.expireAt > currentTime) {
+      const identity = this.identityService.identity;
+      //if no identity set and is login, get identity from api
+      if (identity === null) {
+        await this.getIdentityAsync();
+      }
+      return true;
+    }
+
+    //no valid tokens (jwt and refresh) no auth found
+    this.removeFromLocalStorage(this.key);
+    return false;
+  }
+
+  private async getIdentityAsync(): Promise<void> {
+    this.identityService.identity = await this.http.get<User>(`${environment.apiBaseUrl}/users/me`).toPromise();
   }
 }

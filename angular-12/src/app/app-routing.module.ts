@@ -5,10 +5,16 @@ import { EmptyComponent } from './layouts/empty/empty.component';
 
 import { FullComponent } from './layouts/full/full.component';
 import { AssignmentComponent } from './modules/assignment/assignment.component';
+import { NoAuthGuard } from './core/guards/noAuth.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const Approutes: Routes = [
+  {path: '', pathMatch : 'full', redirectTo: 'dashboard'},
+  {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'dashboard'},
   {
     path:'',
+    canActivate: [NoAuthGuard],
+    canActivateChild: [NoAuthGuard],
     component: EmptyComponent,
     children: [
       {
@@ -23,6 +29,8 @@ export const Approutes: Routes = [
   },
   {
     path: '',
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

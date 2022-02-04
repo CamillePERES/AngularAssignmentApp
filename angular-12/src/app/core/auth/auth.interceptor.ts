@@ -35,8 +35,12 @@ export class AuthInterceptor implements HttpInterceptor
         // the user out from the app.
         const token = this.userService.getAuthentication();
 
-        if (token && token.token  && !AuthUtils.isTokenExpired(token.token, token.expireAt))
+        console.log('INTERCEPTOR')
+        console.log(token?.token)
+
+        if (token != null && !AuthUtils.isTokenExpired(token.token))
         {
+          console.log('totot')
             newReq = req.clone({
                 headers: req.headers.set('Authorization', 'Bearer ' + token.token)
             });
