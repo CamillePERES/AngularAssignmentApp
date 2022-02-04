@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/node,java,macos,maven,eclipse,angular,intellij,netbeans,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,java,macos,maven,eclipse,angular,intellij,netbeans,visualstudio,visualstudiocode
 
+./docker/data
+
 ### Angular ###
 ## Angular ##
 # compiled output
