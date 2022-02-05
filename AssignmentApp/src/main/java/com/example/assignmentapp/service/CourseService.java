@@ -1,6 +1,7 @@
 package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.CourseFormCreateDto;
+import com.example.assignmentapp.enumeration.CourseExceptionType;
 import com.example.assignmentapp.dto.CourseFormUpdateDto;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.UserException;
