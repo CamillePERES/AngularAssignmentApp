@@ -80,7 +80,7 @@ public class UsersController extends BaseController{
     @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
     public ResponseEntity<LoginResultDto> refresh() {
         return tryHandle(() -> {
-            LoginResultDto result = userService.refresh(this.authenticationFacade.getUser().getLogin());;
+            LoginResultDto result = userService.refresh(this.authenticationFacade.getUser().getLogin());
             return new ResponseEntity<>(result, HttpStatus.OK);
         });
     }

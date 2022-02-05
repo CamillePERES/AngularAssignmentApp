@@ -65,13 +65,24 @@ public class AssignmentsController extends BaseController {
     }
 
     @PutMapping()
-    @PreAuthorize("hasAuthority('TEACHER')")
+    //@PreAuthorize("hasAuthority('TEACHER')")
     public ResponseEntity<AssignmentDto> updateAssignment(@RequestBody AssignmentFormUpdateDto assignmentFormUpdateDto){
         return tryHandle(() -> {
             AssignmentEntity assignmentModified = assignmentService.updateAssignment(assignmentFormUpdateDto);
             return new ResponseEntity<>(new AssignmentDto(assignmentModified), HttpStatus.OK);
         });
     }
+
+    /*
+    * @PutMapping()
+    //@RolesAllowed("TEACHER")
+    @PreAuthorize("hasAuthority('TEACHER')")
+    public ResponseEntity<WorkDto> updateWorkForEvaluation(@RequestBody WorkFormEvaluationDto workFormEvaluation){
+        return tryHandle(() -> {
+            WorkEntity workEvaluated = workService.updateWorkForEvaluation(workFormEvaluation);
+            return new ResponseEntity<>(new WorkDto(workEvaluated), HttpStatus.OK);
+        });
+    }*/
 
     @GetMapping(value="/search")
     //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")

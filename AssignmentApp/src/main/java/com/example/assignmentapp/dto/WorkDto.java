@@ -10,8 +10,8 @@ public class WorkDto {
     private int grade;
     private String comment;
     private String status;
-    private int idUser;
-    private int idAss;
+    private UserDto user;
+    private AssignmentDto assignment;
 
     public WorkDto() {
     }
@@ -23,8 +23,8 @@ public class WorkDto {
         this.grade = entity.getGrade();
         this.comment = entity.getComment();
         this.status = entity.getStatus();
-        this.idUser = entity.getUserEntity().getIduser();
-        this.idAss = entity.getAssignmentEntity().getIdass();
+        this.user = new UserDto(entity.getUserEntity());
+        this.assignment = new AssignmentDto(entity.getAssignmentEntity());
     }
 
     public int getIdwork() {
@@ -75,19 +75,19 @@ public class WorkDto {
         this.status = status;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public UserDto getUser() {
+        return user;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 
-    public int getIdAss() {
-        return idAss;
+    public AssignmentDto getAssignment() {
+        return assignment;
     }
 
-    public void setIdAss(int idAss) {
-        this.idAss = idAss;
+    public void setAssignment(AssignmentDto assignment) {
+        this.assignment = assignment;
     }
 }

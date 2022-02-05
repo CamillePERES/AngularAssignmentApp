@@ -6,6 +6,7 @@ import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.EntityNotFoundException;
+import com.example.assignmentapp.exceptions.WorkException;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.repositories.IAssignmentRepository;
@@ -55,11 +56,11 @@ public class AssignmentService {
         //user actuellement log
         int authIdUser = authenticationFacade.getUser().getIduser();
 
-        Optional<AssignmentEntity> oass = assignmentRepository.findById(assignmentFormCreate.getIdAss());
+        /*Optional<AssignmentEntity> oass = assignmentRepository.findById(assignmentFormCreate.getIdAss());
 
         if (oass.isPresent()) {
             throw new AssignmentException();
-        }
+        }*/
 
         //recupere l'id de la matiere qu'on met dans le form
         CourseEntity course = courseService.getCourseById(assignmentFormCreate.getCourseId());
@@ -91,12 +92,19 @@ public class AssignmentService {
     }
 
     @Transactional
-    public AssignmentEntity updateAssignment(AssignmentFormUpdateDto assignmentFormUpdateDto) throws EntityNotFoundException {
+    public AssignmentEntity updateAssignment(AssignmentFormUpdateDto assignmentFormUpdateDto) throws EntityNotFoundException, AssignmentException {
 
         AssignmentEntity ass = this.getAssigmentById(assignmentFormUpdateDto.getIdAss());
 
         if(ass == null){
             throw new EntityNotFoundException();
+        }
+
+        int idUser = ass.getCourseEntity().getUserEntity().getIduser();
+        int authIdUser = authenticationFacade.getUser().getIduser();
+
+        if (idUser != authIdUser){
+            throw new AssignmentException();
         }
 
         return assignmentRepository.save(new AssignmentFormUpdateResultDto(assignmentFormUpdateDto.getName(), assignmentFormUpdateDto.getDate(), assignmentFormUpdateDto.getDescription()));

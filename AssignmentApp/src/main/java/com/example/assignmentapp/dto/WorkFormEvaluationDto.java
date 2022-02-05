@@ -1,5 +1,6 @@
 package com.example.assignmentapp.dto;
 
+
 public class WorkFormEvaluationDto {
 
     private int idWork;

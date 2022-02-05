@@ -11,8 +11,7 @@ public class CourseDto {
     private int idcourse;
     private String name;
     private String description;
-    private Collection<AssignmentDto> assignments;
-    private int idUser;
+    private UserDto user;
 
     public CourseDto(){
 
@@ -22,8 +21,7 @@ public class CourseDto {
         this.idcourse = entity.getIdcourse();
         this.name = entity.getName();
         this.description = entity.getDescription();
-        this.assignments = entity.getAssignments().stream().map(AssignmentDto::new).collect(Collectors.toList());
-        this.idUser = entity.getUserEntity().getIduser();
+        this.user = new UserDto(entity.getUserEntity());
     }
 
     public int getIdcourse() {
@@ -50,19 +48,11 @@ public class CourseDto {
         this.description = description;
     }
 
-    public Collection<AssignmentDto> getAssignments() {
-        return assignments;
+    public UserDto getUser() {
+        return user;
     }
 
-    public void setAssignments(Collection<AssignmentDto> assignments) {
-        this.assignments = assignments;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 }
