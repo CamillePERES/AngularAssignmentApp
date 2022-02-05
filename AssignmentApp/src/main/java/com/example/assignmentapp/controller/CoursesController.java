@@ -2,6 +2,7 @@ package com.example.assignmentapp.controller;
 
 import com.example.assignmentapp.dto.CourseDto;
 import com.example.assignmentapp.dto.CourseFormCreateDto;
+import com.example.assignmentapp.dto.CourseFormUpdateDto;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +22,7 @@ public class CoursesController extends BaseController {
     CourseService courseService;
 
     @GetMapping()
-    //@PreAuthorize("permitAll()")
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<List<CourseDto>> getAllCourses(){
         return tryHandle(() -> {
             List<CourseDto> listCourses = courseService.getAllCourses()
@@ -37,9 +34,7 @@ public class CoursesController extends BaseController {
     }
 
     @GetMapping("/{id}")
-    @PermitAll()
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<CourseDto> getCourse(@PathVariable("id") int id){
         return tryHandle(() -> {
             CourseEntity course = courseService.getCourseById(id);
@@ -48,8 +43,7 @@ public class CoursesController extends BaseController {
     }
 
     @PostMapping()
-    //@RolesAllowed("ROLE_TEACHER")
-    @PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<CourseDto> createCourse(@RequestBody CourseFormCreateDto courseFormCreate){
         return tryHandle(() -> {
             CourseEntity course = courseService.createCourse(courseFormCreate);
@@ -58,10 +52,17 @@ public class CoursesController extends BaseController {
     }
 
     @DeleteMapping("/{id}")
-    @PermitAll()
-    //@RolesAllowed("TEACHER")
-    //@PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER')")
     public void deleteCourse(@PathVariable("id") int id){
         courseService.deleteCourseById(id);
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<CourseDto> updateCourse(@RequestBody CourseFormUpdateDto courseFormUpdateDto){
+        return tryHandle(() -> {
+            CourseEntity courseUpdated = courseService.updateCourse(courseFormUpdateDto);
+            return new ResponseEntity<>(new CourseDto(courseUpdated), HttpStatus.OK);
+        });
     }
 }

@@ -86,9 +86,7 @@ public class UsersController extends BaseController{
         });
     }
 
-
     @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
-    //@RolesAllowed({"ROLE_TEACHER", "TEACHER"})
     @GetMapping(value = "/me")
     public ResponseEntity<UserIdentity> whoAmI() {
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));

@@ -1,6 +1,7 @@
 package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.CourseFormCreateDto;
+import com.example.assignmentapp.dto.CourseFormUpdateDto;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.EntityNotFoundException;
 import com.example.assignmentapp.exceptions.UserException;
@@ -74,6 +75,28 @@ public class CourseService {
     @Transactional
     public void deleteCourseById(Integer id){
         courseRepository.deleteById(id);
+    }
+
+    @Transactional
+    public CourseEntity updateCourse(CourseFormUpdateDto courseFormUpdateDto) throws CourseException, EntityNotFoundException {
+
+        CourseEntity cs = this.getCourseById(courseFormUpdateDto.getIdcourse());
+
+        if(cs == null){
+            throw new EntityNotFoundException();
+        }
+
+        int idUser = cs.getUserEntity().getIduser();
+        int authIdUser = authenticationFacade.getUser().getIduser();
+
+        if(idUser != authIdUser){
+            throw new CourseException();
+        }
+
+        cs.setName(courseFormUpdateDto.getName());
+        cs.setDescription(courseFormUpdateDto.getDescription());
+
+        return courseRepository.saveAndFlush(cs);
     }
 
 }

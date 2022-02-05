@@ -1,21 +1,18 @@
 package com.example.assignmentapp.dto;
 
 
-import java.sql.Date;
+public class CourseFormUpdateDto {
 
-public class AssignmentFormUpdateDto {
-
-    private int idAss;
+    private int idCourse;
     private String name;
     private String description;
-    private Date date;
 
-    public int getIdAss() {
-        return idAss;
+    public int getIdcourse() {
+        return idCourse;
     }
 
-    public void setIdAss(int idAss) {
-        this.idAss = idAss;
+    public void setIdcourse(int idCourse) {
+        this.idCourse = idCourse;
     }
 
     public String getName() {
@@ -32,13 +29,5 @@ public class AssignmentFormUpdateDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 }

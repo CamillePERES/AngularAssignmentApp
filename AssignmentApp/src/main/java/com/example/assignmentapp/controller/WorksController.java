@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +22,7 @@ public class WorksController extends BaseController {
     WorkService workService;
 
     @GetMapping()
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<List<WorkDto>> getAllWorks() {
         return tryHandle(() -> {
             List<WorkDto> listWk = workService.getAllWork()
@@ -36,8 +34,7 @@ public class WorksController extends BaseController {
     }
 
     @GetMapping("/{id}")
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<WorkDto> getWork(@PathVariable("id") int id) {
         return tryHandle(() -> {
             WorkEntity work = workService.getWorkById(id);
@@ -46,8 +43,7 @@ public class WorksController extends BaseController {
     }
 
     @PostMapping()
-    //@RolesAllowed("STUDENT")
-    @PreAuthorize("hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<WorkDto> createWork(@RequestBody WorkFormCreateDto workFormCreateDto) {
         return tryHandle(() -> {
             WorkEntity workCreated = workService.createWork(workFormCreateDto);
@@ -56,8 +52,7 @@ public class WorksController extends BaseController {
     }
 
     @PutMapping()
-    //@RolesAllowed("TEACHER")
-    @PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<WorkDto> updateWorkForEvaluation(@RequestBody WorkFormEvaluationDto workFormEvaluation){
         return tryHandle(() -> {
             WorkEntity workEvaluated = workService.updateWorkForEvaluation(workFormEvaluation);
@@ -66,8 +61,7 @@ public class WorksController extends BaseController {
     }
 
     @DeleteMapping("/{id}")
-    //@RolesAllowed("STUDENT")
-    @PreAuthorize("hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('STUDENT')")
     public void deleteWork(@PathVariable("id") int id) {
         workService.deleteWorkById(id);
     }

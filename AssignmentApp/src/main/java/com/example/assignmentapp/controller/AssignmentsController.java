@@ -3,7 +3,6 @@ package com.example.assignmentapp.controller;
 
 import com.example.assignmentapp.dto.AssignmentDto;
 import com.example.assignmentapp.dto.AssignmentFormUpdateDto;
-import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.dto.AssignmentFormCreateDto;
 import com.example.assignmentapp.service.AssignmentService;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +23,7 @@ public class AssignmentsController extends BaseController {
     AssignmentService assignmentService;
 
     @GetMapping()
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<List<AssignmentDto>> getAllAssignments() {
         return tryHandle(() -> {
             List<AssignmentDto> listAss = assignmentService.getAllAssignment()
@@ -38,8 +35,7 @@ public class AssignmentsController extends BaseController {
     }
 
     @GetMapping("/{id}")
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<AssignmentDto> getAssignment(@PathVariable("id") int id) {
         return tryHandle(() -> {
             AssignmentEntity assignment = assignmentService.getAssigmentById(id);
@@ -48,8 +44,7 @@ public class AssignmentsController extends BaseController {
     }
 
     @PostMapping()
-    //@RolesAllowed("TEACHER")
-    @PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<AssignmentDto> createAssignment(@RequestBody AssignmentFormCreateDto assignmentFormCreate) {
         return tryHandle(() -> {
             AssignmentEntity assignmentCreated = assignmentService.createAssignment(assignmentFormCreate);
@@ -58,35 +53,13 @@ public class AssignmentsController extends BaseController {
     }
 
     @DeleteMapping("/{id}")
-    //@RolesAllowed("TEACHER")
-    @PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER')")
     public void deleteAssignment(@PathVariable("id") int id) {
         assignmentService.deleteAssignmentById(id);
     }
 
-    @PutMapping()
-    //@PreAuthorize("hasAuthority('TEACHER')")
-    public ResponseEntity<AssignmentDto> updateAssignment(@RequestBody AssignmentFormUpdateDto assignmentFormUpdateDto){
-        return tryHandle(() -> {
-            AssignmentEntity assignmentModified = assignmentService.updateAssignment(assignmentFormUpdateDto);
-            return new ResponseEntity<>(new AssignmentDto(assignmentModified), HttpStatus.OK);
-        });
-    }
-
-    /*
-    * @PutMapping()
-    //@RolesAllowed("TEACHER")
-    @PreAuthorize("hasAuthority('TEACHER')")
-    public ResponseEntity<WorkDto> updateWorkForEvaluation(@RequestBody WorkFormEvaluationDto workFormEvaluation){
-        return tryHandle(() -> {
-            WorkEntity workEvaluated = workService.updateWorkForEvaluation(workFormEvaluation);
-            return new ResponseEntity<>(new WorkDto(workEvaluated), HttpStatus.OK);
-        });
-    }*/
-
     @GetMapping(value="/search")
-    //@PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
-    @RolesAllowed({"TEACHER", "STUDENT"})
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<List<AssignmentDto>> getAllAssignmentsPagination(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize) {
         return tryHandle(() -> {
             List<AssignmentDto> list = assignmentService.getAllAssignmentsPagination(pageNo, pageSize)
@@ -94,6 +67,15 @@ public class AssignmentsController extends BaseController {
                     .map(listAss -> new AssignmentDto(listAss))
                     .collect(Collectors.toList());
             return new ResponseEntity<>(list, HttpStatus.OK);
+        });
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<AssignmentDto> updateAssignment(@RequestBody AssignmentFormUpdateDto assignmentFormUpdateDto){
+        return tryHandle(() -> {
+            AssignmentEntity assigmentUpdated = assignmentService.updateAssignment(assignmentFormUpdateDto);
+            return new ResponseEntity<>(new AssignmentDto(assigmentUpdated), HttpStatus.OK);
         });
     }
 

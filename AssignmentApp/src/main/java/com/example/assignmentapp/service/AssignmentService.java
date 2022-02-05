@@ -2,11 +2,9 @@ package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.AssignmentFormCreateDto;
 import com.example.assignmentapp.dto.AssignmentFormUpdateDto;
-import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.EntityNotFoundException;
-import com.example.assignmentapp.exceptions.WorkException;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.repositories.IAssignmentRepository;
@@ -92,25 +90,6 @@ public class AssignmentService {
     }
 
     @Transactional
-    public AssignmentEntity updateAssignment(AssignmentFormUpdateDto assignmentFormUpdateDto) throws EntityNotFoundException, AssignmentException {
-
-        AssignmentEntity ass = this.getAssigmentById(assignmentFormUpdateDto.getIdAss());
-
-        if(ass == null){
-            throw new EntityNotFoundException();
-        }
-
-        int idUser = ass.getCourseEntity().getUserEntity().getIduser();
-        int authIdUser = authenticationFacade.getUser().getIduser();
-
-        if (idUser != authIdUser){
-            throw new AssignmentException();
-        }
-
-        return assignmentRepository.save(new AssignmentFormUpdateResultDto(assignmentFormUpdateDto.getName(), assignmentFormUpdateDto.getDate(), assignmentFormUpdateDto.getDescription()));
-    }
-
-    @Transactional
     public void deleteAssignmentById(Integer id) {
         assignmentRepository.deleteById(id);
     }
@@ -127,5 +106,28 @@ public class AssignmentService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Transactional
+    public AssignmentEntity updateAssignment(AssignmentFormUpdateDto assignmentFormUpdateDto) throws EntityNotFoundException, AssignmentException {
+
+        AssignmentEntity ass = this.getAssigmentById(assignmentFormUpdateDto.getIdAss());
+
+        if(ass == null){
+            throw new EntityNotFoundException();
+        }
+
+        int idUser = ass.getCourseEntity().getUserEntity().getIduser();
+        int authIdUser = authenticationFacade.getUser().getIduser();
+
+        if(idUser != authIdUser){
+            throw new AssignmentException();
+        }
+
+        ass.setName(assignmentFormUpdateDto.getName());
+        ass.setDescription(assignmentFormUpdateDto.getDescription());
+        ass.setDate(assignmentFormUpdateDto.getDate());
+
+        return assignmentRepository.saveAndFlush(ass);
     }
 }
