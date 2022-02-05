@@ -1,6 +1,7 @@
 package com.example.assignmentapp.security;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -8,19 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import com.example.assignmentapp.dto.LoginResultDto;
 import com.example.assignmentapp.exceptions.CustomException;
 import com.example.assignmentapp.model.UserRoleEntity;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
@@ -29,6 +27,9 @@ public class JwtTokenProvider {
    * THIS IS NOT A SECURE PRACTICE! For simplicity, we are storing a static key here. Ideally, in a
    * microservices environment, this key would be kept on a config-server.
    */
+
+  private final String rolesKey = "roles";
+
   @Value("${security.jwt.token.secret-key:secret-key}")
   private String secretKey;
 
@@ -45,11 +46,15 @@ public class JwtTokenProvider {
 
   public LoginResultDto createToken(String login, String appUserRoles) {
 
+    /*String authorities = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
+
     List<SimpleGrantedAuthority> roles = List.of(new SimpleGrantedAuthority[]{
       new SimpleGrantedAuthority(UserRoleEntity.valueOf(appUserRoles).getAuthority())
-    });
+    });*/
     Claims claims = Jwts.claims().setSubject(login);
-    claims.put("auth", roles);
+    claims.put(rolesKey, UserRoleEntity.valueOf(appUserRoles).getAuthority());
 
     Date now = new Date();
     Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -92,6 +97,31 @@ public class JwtTokenProvider {
     } catch (JwtException | IllegalArgumentException e) {
       throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  UsernamePasswordAuthenticationToken getAuthenticationToken(final String token) {
+
+    UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
+
+    final JwtParser jwtParser = Jwts.parser().setSigningKey(secretKey);
+
+    final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+
+    final Claims claims = claimsJws.getBody();
+
+    final Collection<? extends GrantedAuthority> authorities =
+            Arrays.stream(claims.get(rolesKey).toString().split(","))
+                    .map(e -> new SimpleGrantedAuthority("ROLE_"+e))
+                    .collect(Collectors.toList());
+
+    return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+  }
+
+  private Claims getAllClaimsFromToken(String token) {
+    return Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody();
   }
 
 }

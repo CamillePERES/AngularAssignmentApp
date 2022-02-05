@@ -8,27 +8,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.assignmentapp.exceptions.CustomException;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 // We should use OncePerRequestFilter since we are doing a database call, there is no point in doing this more than once
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-  private final JwtTokenProvider jwtTokenProvider;
-
-  public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-    this.jwtTokenProvider = jwtTokenProvider;
-  }
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @Override
   protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
     String token = jwtTokenProvider.resolveToken(httpServletRequest);
     try {
       if (token != null && jwtTokenProvider.validateToken(token)) {
-        Authentication auth = jwtTokenProvider.getAuthentication(token);
+        UsernamePasswordAuthenticationToken auth = jwtTokenProvider.getAuthenticationToken(token);
+        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
         SecurityContextHolder.getContext().setAuthentication(auth);
       }
     } catch (CustomException ex) {
