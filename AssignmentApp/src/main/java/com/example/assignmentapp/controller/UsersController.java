@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,9 +86,10 @@ public class UsersController extends BaseController{
         });
     }
 
+
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
+    //@RolesAllowed({"ROLE_TEACHER", "TEACHER"})
     @GetMapping(value = "/me")
-    //@RolesAllowed({"TEACHER", "STUDENT"})
-    @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
     public ResponseEntity<UserIdentity> whoAmI() {
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));
     }
