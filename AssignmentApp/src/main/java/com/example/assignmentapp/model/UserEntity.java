@@ -1,6 +1,7 @@
 package com.example.assignmentapp.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -17,15 +18,15 @@ public class UserEntity {
     private Collection<CourseEntity> courses;
     private Collection<WorkEntity> works;
 
-    public UserEntity(int iduser, String name, String firstname, String login, String password, String role, Collection<CourseEntity> courses, Collection<WorkEntity> works) {
+    public UserEntity(int iduser, String name, String firstname, String login, String password, String role) {
         this.iduser = iduser;
         this.name = name;
         this.firstname = firstname;
         this.login = login;
         this.password = password;
         this.role = role;
-        this.courses = courses;
-        this.works = works;
+        this.courses = new ArrayList<>();
+        this.works = new ArrayList<>();
     }
 
     public UserEntity(){

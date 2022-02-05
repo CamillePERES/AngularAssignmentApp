@@ -85,7 +85,13 @@ public class WorkService {
             throw new WorkException();
         }
 
-        return workRepository.save(new WorkEntity(wk.getName(), wk.getDescription(), workFormEvaluation.getGrade(), workFormEvaluation.getComment(), EnumWorkStatus.Evaluated.name(), wk.getUserEntity(), wk.getAssignmentEntity()));
+        if(wk.getStatus().equals(EnumWorkStatus.Submitted.name()))
+
+        wk.setGrade(workFormEvaluation.getGrade());
+        wk.setComment(workFormEvaluation.getComment());
+        wk.setStatus(EnumWorkStatus.Evaluated.name());
+
+        return workRepository.saveAndFlush(wk);
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.example.assignmentapp.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ public class CourseEntity {
         this.name = name;
         this.userEntity = userEntity;
         this.description = description;
+        this.assignments = new ArrayList<>();
     }
 
     public CourseEntity(){

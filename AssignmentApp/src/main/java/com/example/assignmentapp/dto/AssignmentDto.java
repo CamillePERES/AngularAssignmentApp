@@ -5,6 +5,7 @@ import com.example.assignmentapp.model.WorkEntity;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AssignmentDto {
@@ -13,20 +14,14 @@ public class AssignmentDto {
     private String name;
     private Date date;
     private String description;
-    private int courseId;
-    private Collection<WorkDto> worksByIdass;
-
-    public AssignmentDto() {
-
-    }
+    private CourseDto course;
 
     public AssignmentDto(AssignmentEntity entity) {
         this.idass = entity.getIdass();
         this.name = entity.getName();
         this.date = entity.getDate();
         this.description = entity.getDescription();
-        this.courseId = entity.getCourseEntity().getIdcourse();
-        this.worksByIdass = entity.getWorks().stream().map(WorkDto::new).collect(Collectors.toList());
+        this.course = new CourseDto(entity.getCourseEntity());
     }
 
 
@@ -62,19 +57,11 @@ public class AssignmentDto {
         this.description = description;
     }
 
-    public int getCourseId() {
-        return courseId;
+    public CourseDto getCourse() {
+        return course;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public Collection<WorkDto> getWorksByIdass() {
-        return worksByIdass;
-    }
-
-    public void setWorksByIdass(Collection<WorkDto> worksByIdass) {
-        this.worksByIdass = worksByIdass;
+    public void setCourse(CourseDto course) {
+        this.course = course;
     }
 }

@@ -2,6 +2,7 @@ package com.example.assignmentapp.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -24,6 +25,7 @@ public class AssignmentEntity {
         this.date = date;
         this.description = description;
         this.courseEntity = courseEntity;
+        this.works = new ArrayList<>();
     }
 
     @Id
