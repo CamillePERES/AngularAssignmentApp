@@ -2,7 +2,7 @@ package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.LoginFormDto;
 import com.example.assignmentapp.dto.LoginResultDto;
-import com.example.assignmentapp.exceptions.CustomException;
+import com.example.assignmentapp.enumeration.UserExceptionType;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.repositories.IUserRepository;
@@ -50,7 +50,7 @@ public class UserService {
         Optional<UserEntity> user = userRepository.findById(id);
 
         if(user.isEmpty()){
-            throw new UserException();
+            throw new UserException(UserExceptionType.NOT_FOUND);
         }
 
         return user.get();

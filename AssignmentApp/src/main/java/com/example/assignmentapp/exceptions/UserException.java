@@ -1,10 +1,9 @@
 package com.example.assignmentapp.exceptions;
 
-import org.springframework.http.HttpStatus;
+import com.example.assignmentapp.enumeration.UserExceptionType;
 
 public class UserException extends BusinessException{
-    @Override
-    public HttpStatus getHttpStatus() {
-        return HttpStatus.BAD_REQUEST;
+    public UserException(UserExceptionType type){
+        super(type);
     }
 }

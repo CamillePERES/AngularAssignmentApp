@@ -2,8 +2,9 @@ package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.WorkFormCreateDto;
 import com.example.assignmentapp.dto.WorkFormEvaluationDto;
+import com.example.assignmentapp.enumeration.AssignmentExceptionType;
 import com.example.assignmentapp.enumeration.EnumWorkStatus;
-import com.example.assignmentapp.exceptions.EntityNotFoundException;
+import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.exceptions.WorkException;
 import com.example.assignmentapp.model.AssignmentEntity;
@@ -50,16 +51,12 @@ public class WorkService {
     }
 
     @Transactional
-    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, EntityNotFoundException, WorkException {
+    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, WorkException, AssignmentException {
 
         //on recupere l'idass et l'iduser passes dans le formulaire
         UserEntity user = userService.getUserById(workFormCreateDto.getIdUser());
         AssignmentEntity assignment = assignmentService.getAssigmentById(workFormCreateDto.getIdAss());
-
-        if(user == null && assignment == null){
-            throw new EntityNotFoundException();
-        }
-
+        
         Collection<WorkEntity> courses = assignment.getWorks();
         boolean alreadyHaveAName = courses
                 .stream()

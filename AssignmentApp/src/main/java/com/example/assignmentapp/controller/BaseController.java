@@ -1,5 +1,6 @@
 package com.example.assignmentapp.controller;
 
+import com.example.assignmentapp.dto.ApiErrorResponse;
 import com.example.assignmentapp.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,11 @@ public abstract class BaseController {
     private <T> ResponseEntity<T> handleException(Exception e) {
 
         if(e instanceof BusinessException){
-            return new ResponseEntity<>(((BusinessException) e).getHttpStatus());
+            BusinessException ex = (BusinessException) e;
+            ApiErrorResponse resp = new ApiErrorResponse();
+            resp.setStatus(ex.type.getHttpStatus().value());
+            resp.setMessage(ex.type.getMessage());
+            return new ResponseEntity(resp, ex.type.getHttpStatus());
         }
 
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

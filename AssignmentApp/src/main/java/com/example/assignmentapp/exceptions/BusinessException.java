@@ -1,9 +1,12 @@
 package com.example.assignmentapp.exceptions;
 
-import org.springframework.http.HttpStatus;
+import com.example.assignmentapp.enumeration.IExceptionType;
 
 public abstract class BusinessException extends Exception {
 
-    public abstract HttpStatus getHttpStatus();
+    public IExceptionType type;
 
+    protected BusinessException(IExceptionType type){
+        this.type = type;
+    }
 }

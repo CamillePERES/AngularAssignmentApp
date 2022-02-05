@@ -1,8 +1,8 @@
 package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.CourseFormCreateDto;
+import com.example.assignmentapp.enumeration.CourseExceptionType;
 import com.example.assignmentapp.exceptions.CourseException;
-import com.example.assignmentapp.exceptions.EntityNotFoundException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.model.UserEntity;
@@ -38,14 +38,14 @@ public class CourseService {
         Optional<CourseEntity> course = courseRepository.findById(id);
 
         if(course.isEmpty()){
-            throw new CourseException();
+            throw new CourseException(CourseExceptionType.NOT_FOUND);
         }
 
         return course.get();
     }
 
     @Transactional
-    public CourseEntity createCourse(CourseFormCreateDto courseFormCreate) throws EntityNotFoundException, CourseException, UserException {
+    public CourseEntity createCourse(CourseFormCreateDto courseFormCreate) throws CourseException, UserException {
 
         //recuperer le user actuellement connecte
         UserIdentity authIdUser = authenticationFacade.getUser();
@@ -54,7 +54,7 @@ public class CourseService {
         UserEntity user = userService.getUserById(courseFormCreate.getIdUser());
 
         if(user.getIduser() != authIdUser.getIduser()){
-            throw new EntityNotFoundException();
+            throw new CourseException(CourseExceptionType.USER_NOT_OWNER);
         }
 
         //test s'il y a deja une matiere avec le meme nom pour ce user
@@ -65,7 +65,7 @@ public class CourseService {
                 .anyMatch(course -> course.getName().equals(courseFormCreate.getName()));
 
         if(haveAlreadyAName){
-            throw new CourseException();
+            throw new CourseException(CourseExceptionType.ALREADY_EXIST_CREATE);
         }
 
         return courseRepository.save(new CourseEntity(courseFormCreate.getName(), user, courseFormCreate.getDescription()));

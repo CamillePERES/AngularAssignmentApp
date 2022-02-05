@@ -1,12 +1,10 @@
 package com.example.assignmentapp.exceptions;
 
-import org.springframework.http.HttpStatus;
+import com.example.assignmentapp.enumeration.WorkExceptionType;
 
 public class WorkException extends BusinessException{
 
-
-    @Override
-    public HttpStatus getHttpStatus() {
-        return HttpStatus.BAD_REQUEST;
+    public WorkException(WorkExceptionType type){
+        super(type);
     }
 }

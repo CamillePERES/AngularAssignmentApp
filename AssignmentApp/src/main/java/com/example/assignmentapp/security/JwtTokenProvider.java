@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import com.example.assignmentapp.dto.LoginResultDto;
-import com.example.assignmentapp.exceptions.CustomException;
 import com.example.assignmentapp.model.UserRoleEntity;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;

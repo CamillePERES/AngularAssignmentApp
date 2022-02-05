@@ -3,9 +3,9 @@ package com.example.assignmentapp.service;
 import com.example.assignmentapp.dto.AssignmentFormCreateDto;
 import com.example.assignmentapp.dto.AssignmentFormUpdateDto;
 import com.example.assignmentapp.dto.AssignmentFormUpdateResultDto;
+import com.example.assignmentapp.enumeration.AssignmentExceptionType;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.CourseException;
-import com.example.assignmentapp.exceptions.EntityNotFoundException;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.repositories.IAssignmentRepository;
@@ -39,11 +39,11 @@ public class AssignmentService {
         return assignmentRepository.findAll();
     }
 
-    public AssignmentEntity getAssigmentById(int id) throws EntityNotFoundException {
+    public AssignmentEntity getAssigmentById(int id) throws AssignmentException {
         Optional<AssignmentEntity> assignment = assignmentRepository.findById(id);
 
         if (assignment.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new AssignmentException(AssignmentExceptionType.NOT_FOUND);
         }
 
         return assignment.get();
