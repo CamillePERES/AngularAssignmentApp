@@ -78,19 +78,15 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseEntity updateCourse(CourseFormUpdateDto courseFormUpdateDto) throws CourseException, EntityNotFoundException {
+    public CourseEntity updateCourse(CourseFormUpdateDto courseFormUpdateDto) throws CourseException {
 
         CourseEntity cs = this.getCourseById(courseFormUpdateDto.getIdcourse());
-
-        if(cs == null){
-            throw new EntityNotFoundException();
-        }
 
         int idUser = cs.getUserEntity().getIduser();
         int authIdUser = authenticationFacade.getUser().getIduser();
 
         if(idUser != authIdUser){
-            throw new CourseException();
+            throw new CourseException(CourseExceptionType.USER_NOT_OWNER);
         }
 
         cs.setName(courseFormUpdateDto.getName());
@@ -98,5 +94,4 @@ public class CourseService {
 
         return courseRepository.saveAndFlush(cs);
     }
-
 }

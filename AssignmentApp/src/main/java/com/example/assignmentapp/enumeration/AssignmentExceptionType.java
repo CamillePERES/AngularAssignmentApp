@@ -3,7 +3,8 @@ package com.example.assignmentapp.enumeration;
 import org.springframework.http.HttpStatus;
 
 public enum AssignmentExceptionType implements IExceptionType {
-    NOT_FOUND("Assignment not found", HttpStatus.BAD_REQUEST)
+    NOT_FOUND("Assignment not found", HttpStatus.BAD_REQUEST),
+    ALREADY_EXIST_CREATE("Assignment with same name already exist", HttpStatus.BAD_REQUEST),
     ;
 
     private String message;

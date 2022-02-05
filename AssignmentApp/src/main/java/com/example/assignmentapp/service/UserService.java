@@ -60,7 +60,7 @@ public class UserService {
     public UserEntity createUser(UserEntity user) throws UserException {
         UserEntity userLoginExists = userRepository.getUserByLogin(user.getLogin());
         if (userLoginExists != null){
-            throw new UserException();
+            throw new UserException(UserExceptionType.ALREADY_EXIST_CREATE);
         }
         else{
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -73,7 +73,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public LoginResultDto signIn(LoginFormDto loginForm) {
+    public LoginResultDto signIn(LoginFormDto loginForm) throws UserException {
 
         String login = loginForm.getLogin();
 
@@ -81,7 +81,7 @@ public class UserService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, loginForm.getPassword()));
             return jwtTokenProvider.createToken(login, userRepository.getUserByLogin(login).getRole());
         } catch (AuthenticationException e) {
-            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new UserException(UserExceptionType.INVALID_CREDENTIAL);
         }
     }
 
@@ -100,7 +100,6 @@ public class UserService {
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
         return new RedirectView("/pictures", true);
-
     }
 
 }

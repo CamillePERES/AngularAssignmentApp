@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import com.example.assignmentapp.dto.LoginResultDto;
+import com.example.assignmentapp.enumeration.UserExceptionType;
+import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserRoleEntity;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +47,6 @@ public class JwtTokenProvider {
 
   public LoginResultDto createToken(String login, String appUserRoles) {
 
-    /*String authorities = authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(","));
-
-    List<SimpleGrantedAuthority> roles = List.of(new SimpleGrantedAuthority[]{
-      new SimpleGrantedAuthority(UserRoleEntity.valueOf(appUserRoles).getAuthority())
-    });*/
     Claims claims = Jwts.claims().setSubject(login);
     claims.put(rolesKey, UserRoleEntity.valueOf(appUserRoles).getAuthority());
 
@@ -89,12 +84,12 @@ public class JwtTokenProvider {
     return null;
   }
 
-  public boolean validateToken(String token) {
+  public boolean validateToken(String token) throws UserException {
     try {
       Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
       return true;
     } catch (JwtException | IllegalArgumentException e) {
-      throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new UserException(UserExceptionType.TOKEN_NOT_VALID);
     }
   }
 

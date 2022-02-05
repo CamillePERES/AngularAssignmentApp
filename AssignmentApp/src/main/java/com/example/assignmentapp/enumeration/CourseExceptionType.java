@@ -3,7 +3,7 @@ package com.example.assignmentapp.enumeration;
 import org.springframework.http.HttpStatus;
 
 public enum CourseExceptionType  implements IExceptionType {
-    NOT_FOUND("Entity not found", HttpStatus.BAD_REQUEST),
+    NOT_FOUND("Course not found", HttpStatus.NOT_FOUND),
     ALREADY_EXIST_CREATE("Entity with same name already exist", HttpStatus.BAD_REQUEST),
     USER_NOT_OWNER("User not the owner of course", HttpStatus.BAD_REQUEST)
     ;

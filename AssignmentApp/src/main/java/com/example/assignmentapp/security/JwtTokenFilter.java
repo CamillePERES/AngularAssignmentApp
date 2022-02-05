@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.assignmentapp.exceptions.BusinessException;
+import com.example.assignmentapp.exceptions.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,10 +31,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
         SecurityContextHolder.getContext().setAuthentication(auth);
       }
-    } catch (CustomException ex) {
+    } catch (BusinessException ex) {
       //this is very important, since it guarantees the user is not authenticated at all
       SecurityContextHolder.clearContext();
-      httpServletResponse.sendError(ex.getHttpStatus().value(), ex.getMessage());
+      httpServletResponse.sendError(ex.type.getHttpStatus().value(), ex.getMessage());
       return;
     }
 

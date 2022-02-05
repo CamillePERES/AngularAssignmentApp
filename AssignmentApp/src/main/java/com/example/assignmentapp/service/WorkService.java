@@ -4,6 +4,7 @@ import com.example.assignmentapp.dto.WorkFormCreateDto;
 import com.example.assignmentapp.dto.WorkFormEvaluationDto;
 import com.example.assignmentapp.enumeration.AssignmentExceptionType;
 import com.example.assignmentapp.enumeration.EnumWorkStatus;
+import com.example.assignmentapp.enumeration.WorkExceptionType;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.exceptions.WorkException;
@@ -44,7 +45,7 @@ public class WorkService {
         Optional<WorkEntity> work = workRepository.findById(id);
 
         if(work.isEmpty()){
-            throw new WorkException();
+            throw new WorkException(WorkExceptionType.NOT_FOUND);
         }
 
         return work.get();
@@ -56,33 +57,20 @@ public class WorkService {
         //on recupere l'idass et l'iduser passes dans le formulaire
         UserEntity user = userService.getUserById(workFormCreateDto.getIdUser());
         AssignmentEntity assignment = assignmentService.getAssigmentById(workFormCreateDto.getIdAss());
-        
-        Collection<WorkEntity> courses = assignment.getWorks();
-        boolean alreadyHaveAName = courses
-                .stream()
-                .anyMatch(wk -> wk.getName().equals(workFormCreateDto.getName()));
-
-        if(alreadyHaveAName){
-            throw new WorkException();
-        }
 
         return workRepository.save(new WorkEntity(workFormCreateDto.getName(), workFormCreateDto.getDescription(), 0, "",  EnumWorkStatus.Submitted.name(), user, assignment));
     }
 
     @Transactional
-    public WorkEntity updateWorkForEvaluation(WorkFormEvaluationDto workFormEvaluation) throws WorkException, EntityNotFoundException {
+    public WorkEntity updateWorkForEvaluation(WorkFormEvaluationDto workFormEvaluation) throws WorkException{
 
         WorkEntity wk = this.getWorkById(workFormEvaluation.getIdWork());
-
-        if(wk == null){
-            throw new EntityNotFoundException();
-        }
 
         int idUser = wk.getAssignmentEntity().getCourseEntity().getUserEntity().getIduser();
         int authIdUser = authenticationFacade.getUser().getIduser();
 
         if (idUser != authIdUser){
-            throw new WorkException();
+            throw new WorkException(WorkExceptionType.NOT_OWNER_OF_COURSE);
         }
 
         if(wk.getStatus().equals(EnumWorkStatus.Submitted.name()))
