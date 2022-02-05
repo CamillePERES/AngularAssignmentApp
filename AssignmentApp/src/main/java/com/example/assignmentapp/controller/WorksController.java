@@ -3,6 +3,7 @@ package com.example.assignmentapp.controller;
 import com.example.assignmentapp.dto.WorkDto;
 import com.example.assignmentapp.dto.WorkFormCreateDto;
 import com.example.assignmentapp.dto.WorkFormEvaluationDto;
+import com.example.assignmentapp.dto.WorkFormUpdateDto;
 import com.example.assignmentapp.model.WorkEntity;
 import com.example.assignmentapp.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,14 @@ public class WorksController extends BaseController {
     @PreAuthorize("hasRole('STUDENT')")
     public void deleteWork(@PathVariable("id") int id) {
         workService.deleteWorkById(id);
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<WorkDto> updateWork(@RequestBody WorkFormUpdateDto workFormUpdateDto){
+        return tryHandle(() -> {
+            WorkEntity workUpdated = workService.updateWork(workFormUpdateDto);
+            return new ResponseEntity<>(new WorkDto(workUpdated), HttpStatus.OK);
+        });
     }
 }
