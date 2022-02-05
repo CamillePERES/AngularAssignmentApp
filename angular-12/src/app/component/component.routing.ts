@@ -1,26 +1,17 @@
 import { Routes } from '@angular/router';
 
-import { NgbdpregressbarBasicComponent } from './progressbar/progressbar.component';
-import { NgbdpaginationBasicComponent } from './pagination/pagination.component';
 import { NgbdAccordionBasicComponent } from './accordion/accordion.component';
 import { NgbdAlertBasicComponent } from './alert/alert.component';
 import { NgbdCarouselBasicComponent } from './carousel/carousel.component';
-import { NgbdDatepickerBasicComponent } from './datepicker/datepicker.component';
-import { NgbdDropdownBasicComponent } from './dropdown-collapse/dropdown-collapse.component';
 import { NgbdModalBasicComponent } from './modal/modal.component';
-import { NgbdPopTooltipComponent } from './popover-tooltip/popover-tooltip.component';
-import { NgbdratingBasicComponent } from './rating/rating.component';
-import { NgbdtabsBasicComponent } from './tabs/tabs.component';
-import { NgbdtimepickerBasicComponent } from './timepicker/timepicker.component';
 import { ButtonsComponent } from './buttons/buttons.component';
 import { CardsComponent } from './card/card.component';
-import { ToastComponent } from './toast/toast.component';
 
 export const ComponentsRoutes: Routes = [
 	{
 		path: '',
 		children: [
-			{
+		/*	{
 				path: 'progressbar',
 				component: NgbdpregressbarBasicComponent,
 				data: {
@@ -31,7 +22,7 @@ export const ComponentsRoutes: Routes = [
 						{ title: 'Progressbar' }
 					]
 				}
-			},
+			},*/
 			{
 				path: 'card',
 				component: CardsComponent,
@@ -44,7 +35,7 @@ export const ComponentsRoutes: Routes = [
 					]
 				}
 			},
-			{
+		/*	{
 				path: 'pagination',
 				component: NgbdpaginationBasicComponent,
 				data: {
@@ -55,7 +46,7 @@ export const ComponentsRoutes: Routes = [
 						{ title: 'Pagination' }
 					]
 				}
-			},
+			},*/
 			{
 				path: 'accordion',
 				component: NgbdAccordionBasicComponent,
@@ -92,7 +83,7 @@ export const ComponentsRoutes: Routes = [
 					]
 				}
 			},
-			{
+		/*	{
 				path: 'datepicker',
 				component: NgbdDatepickerBasicComponent,
 				data: {
@@ -115,7 +106,7 @@ export const ComponentsRoutes: Routes = [
 						{ title: 'Dropdown' }
 					]
 				}
-			},
+			},*/
 			{
 				path: 'modal',
 				component: NgbdModalBasicComponent,
@@ -128,7 +119,7 @@ export const ComponentsRoutes: Routes = [
 					]
 				}
 			},
-			{
+	/*		{
 				path: 'poptool',
 				component: NgbdPopTooltipComponent,
 				data: {
@@ -175,7 +166,7 @@ export const ComponentsRoutes: Routes = [
 						{ title: 'Timepicker' }
 					]
 				}
-			},
+			},*/
 			{
 				path: 'buttons',
 				component: ButtonsComponent,
@@ -188,13 +179,13 @@ export const ComponentsRoutes: Routes = [
 					]
 				}
 			},
-			{
+		/*	{
 				path: 'toast',
 				component: ToastComponent,
 				data: {
 					title: 'Toast',
 				}
-			}
+			}*/
 		]
 	}
 ];

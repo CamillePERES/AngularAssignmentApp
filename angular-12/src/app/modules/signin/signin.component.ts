@@ -2,7 +2,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from "./../../core/user/user.service";
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, NgForm } from "@angular/forms";
-import { ToastService } from 'src/app/component/toast/toast.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
