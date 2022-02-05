@@ -2,7 +2,7 @@ package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.WorkFormCreateDto;
 import com.example.assignmentapp.dto.WorkFormEvaluationDto;
-import com.example.assignmentapp.enumeration.AssignmentExceptionType;
+import com.example.assignmentapp.dto.WorkFormUpdateDto;
 import com.example.assignmentapp.enumeration.EnumWorkStatus;
 import com.example.assignmentapp.enumeration.WorkExceptionType;
 import com.example.assignmentapp.exceptions.AssignmentException;
@@ -85,5 +85,24 @@ public class WorkService {
     @Transactional
     public void deleteWorkById(Integer id){
         workRepository.deleteById(id);
+    }
+
+    @Transactional
+    public WorkEntity updateWork(WorkFormUpdateDto workFormUpdateDto) throws WorkException {
+        WorkEntity wrk = this.getWorkById(workFormUpdateDto.getIdWork());
+
+        int idUser = wrk.getUserEntity().getIduser();
+        int authIdUser = authenticationFacade.getUser().getIduser();
+
+        if (idUser != authIdUser){
+            throw new WorkException(WorkExceptionType.NOT_OWNER_OF_WORK);
+        }
+
+        if(wrk.getStatus().equals(EnumWorkStatus.Submitted.name()))
+
+        wrk.setName(workFormUpdateDto.getName());
+        wrk.setDescription(workFormUpdateDto.getDescription());
+
+        return workRepository.saveAndFlush(wrk);
     }
 }
