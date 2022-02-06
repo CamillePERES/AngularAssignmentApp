@@ -18,7 +18,7 @@ export class AssignmentService extends BaseApiService {
 
   public async getAssignmentAsync(): Promise<Array<Assignment>> {
     try {
-      return await this.http.get<Array<Assignment>>(`${environment.apiBaseUrl}/assignments`).toPromise();
+      return await this.tryGet<Array<Assignment>>(`/assignments`).toPromise();
     } catch (erroer: any) {
       this.toast.error("Couldn't display assignments","Assignment");
       //console.log(error)
@@ -28,7 +28,7 @@ export class AssignmentService extends BaseApiService {
 
   public async getAssignmentByIdAsync(id: number): Promise<Assignment | null> {
     try {
-      return await this.http.get<Assignment>(`${environment.apiBaseUrl}/assignments/`+ id).toPromise();
+      return await this.tryGet<Assignment>(`/assignments`+ id).toPromise();
     } catch (erroer: any) {
       this.toast.error("Couldn't display the assignment","Assignment");
     }
@@ -44,7 +44,7 @@ export class AssignmentService extends BaseApiService {
   public async createAssignmentAsync(form: AssignmentForm): Promise<Assignment | null>{
     console.log(form)
     try{
-      return await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
+      return await this.tryPost<AssignmentForm, Assignment | null>(`/assignments/`, form).toPromise();
     }catch(error:any){
       this.toast.error("Couldn't create the assignment","Assignment");
     }
@@ -53,7 +53,7 @@ export class AssignmentService extends BaseApiService {
 
   public async deleteAssignmentById(id: number): Promise<void>{
     try{
-      await this.http.delete<Assignment>(`${environment.apiBaseUrl}/assignments/` + id).toPromise();
+      await this.http.delete<Assignment>(`${environment.apiBaseUrl}/assignments` + id).toPromise();
     }catch(error:any){
       this.toast.error("Couldn't delete the assignment","Assignment");
     }
@@ -62,8 +62,9 @@ export class AssignmentService extends BaseApiService {
   public async updateAssignment(form: AssignmentFormUpdate): Promise<Assignment | null>{
     console.log(form)
     try{
-      return await this.http.put<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
+      return await this.tryPut<AssignmentFormUpdate, Assignment | null>(`/assignments`, form).toPromise();
     }catch(error){
+      console.log(error)
       this.toast.error("Couldn't edit the assignment","Assignment");
     }
     return null;

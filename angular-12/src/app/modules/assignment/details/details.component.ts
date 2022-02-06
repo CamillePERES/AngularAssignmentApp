@@ -28,7 +28,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   public assignment: Assignment | null = null;
 
   get isStudent() { return this.user != null && this.user.role === 'STUDENT' }
-  get isTeacher() { return this.user != null && this.user.role === 'TEACHER' }
+  get isTeacher() { return this.user != null && this.assignment !== null &&
+    this.user.role === 'TEACHER' &&
+    this.user.iduser === this.assignment.course.user.iduser
+  }
 
   constructor(
     private route: ActivatedRoute,
