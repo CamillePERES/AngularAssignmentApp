@@ -1,5 +1,7 @@
 package com.example.assignmentapp.dto;
 
+import java.sql.Date;
+
 public class WorkFormCreateDto {
 
     private String name;

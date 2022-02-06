@@ -13,6 +13,7 @@ public class AssignmentEntity {
     private String name;
     private String description;
     private Date date;
+    private boolean isclosed;
     private CourseEntity courseEntity;
     private Collection<WorkEntity> works;
 
@@ -25,6 +26,7 @@ public class AssignmentEntity {
         this.date = date;
         this.description = description;
         this.courseEntity = courseEntity;
+        this.isclosed = false;
         this.works = new ArrayList<>();
     }
 
@@ -67,6 +69,16 @@ public class AssignmentEntity {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Basic
+    @Column(name = "isclosed")
+    public boolean getIsclosed() {
+        return isclosed;
+    }
+
+    public void setIsclosed(boolean isclosed) {
+        this.isclosed = isclosed;
     }
 
     @Override

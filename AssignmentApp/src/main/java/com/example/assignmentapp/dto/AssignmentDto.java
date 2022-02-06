@@ -4,9 +4,6 @@ import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.WorkEntity;
 
 import java.sql.Date;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class AssignmentDto {
 
@@ -14,6 +11,7 @@ public class AssignmentDto {
     private String name;
     private Date date;
     private String description;
+    private boolean isclosed;
     private CourseDto course;
 
     public AssignmentDto(AssignmentEntity entity) {
@@ -21,6 +19,7 @@ public class AssignmentDto {
         this.name = entity.getName();
         this.date = entity.getDate();
         this.description = entity.getDescription();
+        this.isclosed = entity.getIsclosed();
         this.course = new CourseDto(entity.getCourseEntity());
     }
 
@@ -55,6 +54,14 @@ public class AssignmentDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isIsclosed() {
+        return isclosed;
+    }
+
+    public void setIsclosed(boolean isclosed) {
+        this.isclosed = isclosed;
     }
 
     public CourseDto getCourse() {

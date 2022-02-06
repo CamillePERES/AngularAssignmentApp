@@ -2,6 +2,8 @@ package com.example.assignmentapp.dto;
 
 import com.example.assignmentapp.model.WorkEntity;
 
+import java.sql.Date;
+
 public class WorkDto {
 
     private int idwork;
@@ -10,6 +12,7 @@ public class WorkDto {
     private int grade;
     private String comment;
     private String status;
+    private Date deliverydate;
     private UserDto user;
     private AssignmentDto assignment;
 
@@ -23,6 +26,7 @@ public class WorkDto {
         this.grade = entity.getGrade();
         this.comment = entity.getComment();
         this.status = entity.getStatus();
+        this.deliverydate = entity.getDeliverydate();
         this.user = new UserDto(entity.getUserEntity());
         this.assignment = new AssignmentDto(entity.getAssignmentEntity());
     }
@@ -73,6 +77,14 @@ public class WorkDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getDeliverydate() {
+        return deliverydate;
+    }
+
+    public void setDeliverydate(Date deliverydate) {
+        this.deliverydate = deliverydate;
     }
 
     public UserDto getUser() {

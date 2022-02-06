@@ -82,7 +82,7 @@ public class CourseService {
     @Transactional
     public CourseEntity updateCourse(CourseFormUpdateDto courseFormUpdateDto) throws CourseException {
 
-        CourseEntity cs = this.getCourseById(courseFormUpdateDto.getIdcourse());
+        CourseEntity cs = this.getCourseById(courseFormUpdateDto.getIdCourse());
 
         int idUser = cs.getUserEntity().getIduser();
         int authIdUser = authenticationFacade.getUser().getIduser();
@@ -94,7 +94,7 @@ public class CourseService {
         cs.setName(courseFormUpdateDto.getName());
         cs.setDescription(courseFormUpdateDto.getDescription());
 
-        return courseRepository.saveAndFlush(cs);
+        return courseRepository.save(cs);
     }
 
     public PaginationResult<CourseDto> getAllCoursesPagination(CourseSearchForm form) {

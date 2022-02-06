@@ -1,6 +1,11 @@
 package com.example.assignmentapp.model;
 
+import com.example.assignmentapp.dto.WorkFormCreateDto;
+import com.example.assignmentapp.enumeration.EnumWorkStatus;
+
 import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -12,15 +17,17 @@ public class WorkEntity {
     private int grade;
     private String comment;
     private String status;
+    private Date deliverydate;
     private UserEntity userEntity;
     private AssignmentEntity assignmentEntity;
 
-    public WorkEntity(String name, String description, int grade, String comment, String status, UserEntity userEntity, AssignmentEntity assignmentEntity) {
-        this.name = name;
-        this.description = description;
-        this.grade = grade;
-        this.comment = comment;
-        this.status = status;
+    public WorkEntity(WorkFormCreateDto workFormCreateDto, UserEntity userEntity, AssignmentEntity assignmentEntity) {
+        this.name = workFormCreateDto.getName();
+        this.description = workFormCreateDto.getDescription();
+        this.grade = 0;
+        this.comment = "";
+        this.status = EnumWorkStatus.Submitted.name();
+        this.deliverydate = java.sql.Date.valueOf(LocalDate.now());
         this.userEntity = userEntity;
         this.assignmentEntity = assignmentEntity;
     }
@@ -88,6 +95,16 @@ public class WorkEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "deliverydate")
+    public java.sql.Date getDeliverydate() {
+        return deliverydate;
+    }
+
+    public void setDeliverydate(java.sql.Date deliverydate) {
+        this.deliverydate = deliverydate;
     }
 
     @Override
