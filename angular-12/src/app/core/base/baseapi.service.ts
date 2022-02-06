@@ -33,7 +33,7 @@ export abstract class BaseApiService {
 
   public async tryGetAsync<T>(url: string): Promise<T> {
     try {
-      return this.http.get<T>(`${this.apiurl}${url}`).toPromise();
+      return await this.http.get<T>(`${this.apiurl}${url}`).toPromise();
     }
     catch(error: any){
       throw this.handleErrorAsync(error);
@@ -42,7 +42,7 @@ export abstract class BaseApiService {
 
   public async tryPostAsync<T,K>(url: string, data: T): Promise<K> {
     try {
-      return this.http.post<K>(`${this.apiurl}${url}`, data).toPromise();
+      return await this.http.post<K>(`${this.apiurl}${url}`, data).toPromise();
     }
     catch(error: any){
       throw this.handleErrorAsync(error);
@@ -51,7 +51,7 @@ export abstract class BaseApiService {
 
   public async tryPutAsync<T, K>(url: string, data: T): Promise<K> {
     try {
-      return this.http.put<K>(`${this.apiurl}${url}`, data).toPromise();
+      return await this.http.put<K>(`${this.apiurl}${url}`, data).toPromise();
     }
     catch(error: any){
       throw this.handleErrorAsync(error);
@@ -62,7 +62,7 @@ export abstract class BaseApiService {
     return (error: HttpErrorResponse): Observable<T> => {
       console.log(error);
       try {
-          this.toast.error(`Status : ${error.status} : ${error.error}`);
+          this.toast.error(`Status : ${error.status} : ${error.error.message}`);
           return throwError(() => error);
       } catch(errorParse){
           return throwError(() => error);
@@ -73,7 +73,7 @@ export abstract class BaseApiService {
   private handleErrorAsync(error: any): Error {
     console.error(error);
     if(error instanceof HttpErrorResponse){
-      this.toast.error(`Status : ${error.status} : ${error.error}`);
+      this.toast.error(`Status : ${error.status} : ${error.error.message}`);
     }
     else {
       this.toast.error(`Status : ${error.status} : ${error.error}`);

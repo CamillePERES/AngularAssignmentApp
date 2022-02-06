@@ -19,7 +19,7 @@ export class CourseService extends BaseApiService {
 
   public async getCoursesAsync(): Promise<Array<Course>> {
     try {
-      return await this.http.get<Array<Course>>(`${environment.apiBaseUrl}/courses`).toPromise();
+      return await this.tryGet<Array<Course>>(`/courses`).toPromise();
     } catch (erroer: any) {
       this.toast.error("Couldn't display courses","Course");
       //console.log(error)
@@ -30,7 +30,7 @@ export class CourseService extends BaseApiService {
 
   public async getCourseByIdAsync(id: number): Promise<Course | null> {
     try {
-      return await this.http.get<Course>(`${environment.apiBaseUrl}/courses/${id}`).toPromise();
+      return await this.tryGet<Course>(`/courses/${id}`).toPromise();
     } catch (erroer: any) {
       this.toast.error("Couldn't display the course","Course");
     }
@@ -39,7 +39,7 @@ export class CourseService extends BaseApiService {
 
   public async createCourseAsync(form: CourseForm): Promise<Course | null>{
     try{
-      return await this.http.post<Course>(`${environment.apiBaseUrl}/courses/`, form).toPromise();
+      return await this.tryPost<CourseForm, Course>(`/courses`, form).toPromise();
     }catch(error:any){
       this.toast.error("Couldn't create the course","Course");
     }
@@ -57,7 +57,7 @@ export class CourseService extends BaseApiService {
   public async updateCourse(form: CourseFormUpdate): Promise<Course | null>{
     console.log(form);
     try{
-      return await this.http.put<Course>(`${environment.apiBaseUrl}/courses/`, form).toPromise();
+      return await this.tryPut<CourseFormUpdate, Course>(`/courses`, form).toPromise();
     }catch(error:any){
       this.toast.error("Couldn't edit the course","Course");
     }

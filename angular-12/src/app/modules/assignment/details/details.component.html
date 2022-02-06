@@ -5,7 +5,7 @@
       <div class="card-body">
         <div *ngIf="!editMode">
           <div class="d-flex" style="justify-content: right" *ngIf="!editMode">
-            <button class="btn btn-primary" (click)="editAssignment()">
+            <button class="btn btn-primary" (click)="editAssignment()" *ngIf="isTeacher">
               Edit
             </button>
           </div>

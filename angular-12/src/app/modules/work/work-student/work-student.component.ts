@@ -22,7 +22,11 @@ export class WorkStudentComponent implements OnInit {
   ngOnInit(): void {
     if(this.idass){
       this.workService.getWorkOfAssignmentById(this.idass.idass)
-        .subscribe(work => this.work = { work: work, viewMode: work !== null})
+        .subscribe(work => {
+          this.work = { work: work, viewMode: work !== null };
+            console.log(this.work)
+
+        })
       //console.log('GET WORK STUDENT', this.work)
     }
   }
