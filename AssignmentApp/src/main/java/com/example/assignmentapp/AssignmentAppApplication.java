@@ -1,5 +1,6 @@
 package com.example.assignmentapp;
 
+import com.example.assignmentapp.dto.UserFormCreateDto;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.model.UserRoleEntity;
 import com.example.assignmentapp.service.UserService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootApplication
 public class AssignmentAppApplication implements CommandLineRunner {
@@ -22,7 +24,7 @@ public class AssignmentAppApplication implements CommandLineRunner {
     @Override
     public void run(String... params) throws Exception {
 
-        UserEntity entity = new UserEntity();
+        UserFormCreateDto entity = new UserFormCreateDto();
         entity.setFirstname("Camille");
         entity.setName("Peres");
         entity.setLogin("cperes");
@@ -31,7 +33,7 @@ public class AssignmentAppApplication implements CommandLineRunner {
 
         this.createUser(entity);
 
-        UserEntity entity2 = new UserEntity();
+        UserFormCreateDto entity2 = new UserFormCreateDto();
         entity2.setFirstname("Laurent");
         entity2.setName("LeP");
         entity2.setLogin("llp");
@@ -41,7 +43,7 @@ public class AssignmentAppApplication implements CommandLineRunner {
         this.createUser(entity2);
     }
 
-    private void createUser(UserEntity entity) {
+    private void createUser(UserFormCreateDto entity) {
         try {
             userService.createUser(entity);
         }

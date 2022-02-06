@@ -1,5 +1,7 @@
 package com.example.assignmentapp.model;
 
+import org.springframework.security.core.userdetails.User;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +33,14 @@ public class UserEntity {
 
     public UserEntity(){
 
+    }
+
+    public UserEntity(String name, String firstname, String login, String password, String role){
+        this.name = name;
+        this.firstname = firstname;
+        this.login = login;
+        this.password = password;
+        this.role = role;
     }
 
     @Id

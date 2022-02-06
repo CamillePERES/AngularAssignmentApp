@@ -3,6 +3,7 @@ package com.example.assignmentapp.controller;
 import com.example.assignmentapp.dto.LoginFormDto;
 import com.example.assignmentapp.dto.LoginResultDto;
 import com.example.assignmentapp.dto.UserDto;
+import com.example.assignmentapp.dto.UserFormCreateDto;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.service.UserService;
@@ -56,9 +57,9 @@ public class UsersController extends BaseController{
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserFormCreateDto userFormCreateDto) {
         return tryHandle(() -> {
-            UserEntity userCreated = userService.createUser(userEntity);
+            UserEntity userCreated = userService.createUser(userFormCreateDto);
             return new ResponseEntity<>(new UserDto(userCreated), HttpStatus.OK);
         });
     }
@@ -77,7 +78,6 @@ public class UsersController extends BaseController{
     }
 
     @GetMapping("/refresh")
-    //@RolesAllowed({"TEACHER", "STUDENT"})
     @PreAuthorize("hasAuthority('TEACHER') and hasAuthority('STUDENT')")
     public ResponseEntity<LoginResultDto> refresh() {
         return tryHandle(() -> {
@@ -92,7 +92,8 @@ public class UsersController extends BaseController{
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));
     }
 
-    @PostMapping(value="/savePic")
+    @PostMapping(value="/savepic")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
     public RedirectView savePicUser(UserEntity user, @RequestParam("picture") MultipartFile multipartFile) throws IOException {
         return userService.savePicUser(user, multipartFile);
     }

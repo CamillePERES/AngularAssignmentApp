@@ -4,7 +4,7 @@ import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
 import { BaseApiService } from "../base/baseapi.service";
 import { IdentityService } from "../identity/identity.service";
-import { LoginResult, LoginForm, User } from "./user.type";
+import { LoginResult, LoginForm, User, UserForm } from "./user.type";
 
 @Injectable({
   providedIn: 'root'
@@ -36,15 +36,16 @@ export class UserService extends BaseApiService
   }
 
 
-  public async signupAsync(user: User) : Promise<void>{
-    //Promise<User>, pq on ne renvoie pas un user mais une void?
+  public async createUserAsync(form: UserForm) : Promise<User | null> {
     try{
-      const result = this.http.post<User>(`${environment.apiBaseUrl}/users/signup`, user).toPromise();
+      const result = this.http.post<User>(`${environment.apiBaseUrl}/users/signup`, form).toPromise();
       this.setLocalStorage('user', result);
     }
     catch(error:any){
       this.toast.error("Account not created","Register");
     }
+
+    return null;
 
   }
 

@@ -9,8 +9,8 @@ import { NoAuthGuard } from './core/guards/noAuth.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 
 export const Approutes: Routes = [
-  {path: '', pathMatch : 'full', redirectTo: 'dashboard'},
-  {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'dashboard'},
+  {path: '', pathMatch : 'full', redirectTo: 'course'},
+  {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'course'},
   {
     path:'',
     canActivate: [NoAuthGuard],
