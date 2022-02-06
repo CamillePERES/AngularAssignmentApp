@@ -17,5 +17,8 @@ export interface CourseForm{
 }
 
 export interface CourseSearchForm {
-  
+  page: number;
+  pageSize: number;
+  courseName: string;
+  userName: string;
 }

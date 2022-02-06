@@ -45,7 +45,6 @@ export const Approutes: Routes = [
       {path:'', redirectTo: '/assignments', pathMatch: 'full'},
       {
         path: 'assignment',
-        component: AssignmentComponent,
         loadChildren: () => import('./modules/assignment/assignment.module').then(m => m.AssignmentModule)
       },
       {path:'', redirectTo: '/courses', pathMatch: 'full'},

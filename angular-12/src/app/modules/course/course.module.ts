@@ -4,8 +4,9 @@ import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
-import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsResolver } from './resolver/course.details.resolver';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -29,7 +30,10 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RouterModule,
     MatCardModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    NgbModalModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class CourseModule { }

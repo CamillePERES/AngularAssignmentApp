@@ -9,6 +9,7 @@ import { Assignment, AssignmentForm } from "./assignment.type";
   providedIn: "root",
 })
 export class AssignmentService {
+
   constructor(private http: HttpClient, protected toast: ToastrService) {}
 
   public async getAssignmentAsync(): Promise<Array<Assignment>> {
@@ -45,5 +46,9 @@ export class AssignmentService {
     }catch(error:any){
       this.toast.error("Couldn't delete the assignment","Assignment");
     }
+  }
+
+  getAssignmentById(id: any): import("rxjs").Observable<any> {
+    throw new Error("Method not implemented.");
   }
 }

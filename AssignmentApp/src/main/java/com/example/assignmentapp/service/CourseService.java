@@ -105,11 +105,11 @@ public class CourseService {
 
         String courseName = form.getCourseName().trim();
         String userName = form.getUserName().trim();
-        Pageable paging = PageRequest.of(form.getPage(), form.getPageSize());
+        Pageable paging = PageRequest.of(form.getPage()-1, form.getPageSize());
         Specification<CourseEntity> spec1 = (root, query, cb) -> cb.like(root.get("name"), "%"+courseName+"%");
-        Specification<CourseEntity> spec2 = (root, query, cb) -> cb.like(root.get("user").get("name"), "%"+userName+"%");
-        Specification<CourseEntity> spec3 = (root, query, cb) -> cb.like(root.get("user").get("firstname"), "%"+userName+"%");
-        Specification<CourseEntity> spec4 = (root, query, cb) -> cb.like(root.get("user").get("login"), "%"+userName+"%");
+        Specification<CourseEntity> spec2 = (root, query, cb) -> cb.like(root.get("userEntity").get("name"), "%"+userName+"%");
+        Specification<CourseEntity> spec3 = (root, query, cb) -> cb.like(root.get("userEntity").get("firstname"), "%"+userName+"%");
+        Specification<CourseEntity> spec4 = (root, query, cb) -> cb.like(root.get("userEntity").get("login"), "%"+userName+"%");
         Specification<CourseEntity> course = null;
         Specification<CourseEntity> user = null;
 

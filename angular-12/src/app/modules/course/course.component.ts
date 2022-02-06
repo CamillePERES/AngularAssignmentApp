@@ -1,7 +1,11 @@
 import { CourseService } from './../../core/course/course.service';
 import { Component, OnInit } from '@angular/core';
-import { Course } from 'src/app/core/course/course.type';
+import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PaginationResult } from 'src/app/core/core.types';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -12,12 +16,24 @@ const FILTER_PAG_REGEX = /[^0-9]/g;
 })
 export class CourseComponent implements OnInit {
 
-  listCourses: Array<Course> = [];
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  searchInputCourse: FormControl = new FormControl();
+  searchInputUser: FormControl = new FormControl();
+
 
   // Pagination
-  private _page: number = 1;
-  get page() { return this._page; }
-  set page(value: number) { this._page = value; }
+  private paginationform: CourseSearchForm = { page: 1, pageSize: 5, courseName: '', userName: ''}
+  public paginationresult: PaginationResult<Course> = {
+    page: this.paginationform.page,
+    pageSize: this.paginationform.pageSize,
+    total: 0,
+    totalPage: 0,
+    results: []
+  }
+  get page() { return this.paginationform.page; }
+  set page(value: number) { this.paginationform.page = value; this.getCourses(); }
+  get pageSize() { return this.paginationform.pageSize; }
+  set pageSize(value: number) { this.paginationform.pageSize = value; }
 
   constructor(
     private courseService: CourseService,
@@ -27,13 +43,40 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.searchInputCourse.setValue(this.paginationform.courseName);
+    this.searchInputCourse.valueChanges
+    .pipe(takeUntil(this._unsubscribeAll),debounceTime(500),distinctUntilChanged())
+    .subscribe(async (value: string | null) => {
+      if(value != null) {
+        this.paginationform.courseName = value;
+        this.page = 1;
+      }
+    });
+
+    this.searchInputUser.setValue(this.paginationform.userName);
+    this.searchInputUser.valueChanges
+    .pipe(takeUntil(this._unsubscribeAll),debounceTime(500),distinctUntilChanged())
+    .subscribe(async (value: string | null) => {
+      if(value != null) {
+        this.paginationform.userName = value;
+        this.page = 1;
+      }
+    });
+
+    this.getCourses();
+  }
+
+  public setPageSize(value: number): void {
+    this.paginationform.pageSize =value;
     this.getCourses();
   }
 
   private async getCourses(): Promise<void>{
+    console.log(this.paginationform)
     try {
-      this.listCourses =  await this.courseService.getCoursesAsync();
-      console.log("work");
+      this.paginationresult =  await this.courseService.searchCoursesAsync(this.paginationform);
+      console.log(this.paginationresult)
     } catch (error) {
         console.log("error");
     }
@@ -51,5 +94,4 @@ export class CourseComponent implements OnInit {
     console.log(value)
     this.routeur.navigate([`/course/details/${value.idcourse}`])
   }
-
 }

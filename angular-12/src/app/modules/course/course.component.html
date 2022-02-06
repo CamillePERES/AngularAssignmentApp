@@ -1,8 +1,11 @@
-<h4 class="d-inline">Courses</h4>
-<div class="row">
+<h1 class="d-inline">Courses</h1>
+<div class="row mt-3">
   <div class="col-12">
     <div class="row">
-      <div class="col-4">
+      <div class="col-md-1">
+        <button type="button btn-lg" class="btn btn-primary">Create</button>
+      </div>
+      <div class="col-md-2">
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text" id="">Course</span>
@@ -11,10 +14,11 @@
             type="text"
             class="form-control"
             name="course"
+            [formControl]="searchInputCourse"
           />
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-md-2">
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text" id="">User</span>
@@ -23,11 +27,26 @@
             type="text"
             class="form-control"
             name="user"
+            [formControl]="searchInputUser"
           />
         </div>
       </div>
-      <div class="col-4">
-        <ngb-pagination [collectionSize]="70" [(page)]="page" [boundaryLinks]="true">
+      <div  class="col-md-2">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Page size</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
+            <option selected value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <ngb-pagination [collectionSize]="paginationresult.total" [(page)]="page" [(pageSize)]="pageSize" [boundaryLinks]="true">
           <ng-template ngbPaginationPages let-page let-pages="pages">
               <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
                   <div class="form-group d-flex flex-nowrap px-2">
@@ -61,7 +80,7 @@
   <div class="col-12">
     <div class="container-fluide">
       <div class="row">
-        <div class="col-md-3" *ngFor="let co of listCourses">
+        <div class="col-md-3" *ngFor="let co of paginationresult.results">
           <div class="card">
             <img class="card-img-top" src="assets/images/big/img1.jpg" alt="Card image cap">
             <div class="card-body">
@@ -88,3 +107,18 @@
     </div>
   </div>
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>One fine body&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
