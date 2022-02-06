@@ -14,13 +14,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -132,5 +136,27 @@ public class CourseService {
         results.setTotalPage(courses.size());
 
         return results;
+    }
+
+    @Transactional
+    public void savePicCourse(int id, MultipartFile multipartFile) throws IOException, CourseException {
+
+        CourseEntity course = this.getCourseById(id);
+
+        List<String> term = Arrays.asList("jpeg", "jpg", "png", "gif");
+
+        boolean isOk = term.stream().anyMatch(t -> multipartFile.getOriginalFilename().toLowerCase().endsWith(t));
+
+        if(isOk){
+            course.setPicturename(multipartFile.getOriginalFilename());
+            course.setPicturebytes(multipartFile.getBytes());
+            course.setPicturecontenttype(multipartFile.getContentType());
+            courseRepository.save(course);
+        }
+    }
+
+    public ResponseEntity<byte[]> getCoursePic(int id) throws CourseException {
+        CourseEntity course = this.getCourseById(id);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(course.getPicturecontenttype())).body(course.getPicturebytes());
     }
 }

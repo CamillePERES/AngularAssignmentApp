@@ -1,1 +1,6 @@
-
+img{
+  object-fit: cover;
+  object-position: center;
+  height:15rem;
+  width:100%;
+}

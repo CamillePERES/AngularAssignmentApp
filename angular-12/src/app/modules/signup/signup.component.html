@@ -42,9 +42,53 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <!--<div class="col-12">
-                <input type="file"/>
-              </div>-->
+              <div class="col-md-12">
+                  <div class="d-flex flex-col m-2 p-4 shadow rounded-2xl bg-card justify-content-center" *ngIf="image != null">
+                    <div class="row">
+                      <div class="col-12">
+                        <img
+                          class=""
+                          [src]="image.buffer"
+                        />
+                      </div>
+                      <div
+                        *ngIf="progress != null && progress.value > 0"
+                        class="col-12"
+                      >
+                        <mat-progress-bar
+                          [mode]="determinate"
+                          [value]="progress.value"
+                        ></mat-progress-bar>
+                      </div>
+                      <div
+                        class="col-12"
+                      >
+                        <div class="truncate" [matTooltip]="image.file.name">
+                          {{ image.file.name }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="flex flex-col items-center mt-4 mb-4 sm:mt-0 md:mt-4">
+                  <button
+                  type="button btn-lg"
+                    class="ml-4 btn btn-primary"
+                    (click)="fileInput.click()"
+                  >
+                    <mat-icon>upload</mat-icon>
+                    <span class="ml-2 mr-1">Upload Picture</span>
+                    <input
+                      #fileInput
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      (change)="selectFiles($event)"
+                      style="display: none"
+                    />
+                  </button>
+                  <mat-error *ngIf="image === null">Image is required </mat-error>
+                </div>
+              </div>
             </div>
           </mat-card-content>
           <button

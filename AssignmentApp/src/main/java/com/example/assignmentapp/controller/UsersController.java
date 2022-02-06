@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.util.List;
@@ -92,10 +93,18 @@ public class UsersController extends BaseController{
         return tryHandle(() -> new ResponseEntity<>(this.authenticationFacade.getUser(), HttpStatus.OK));
     }
 
-    @PostMapping(value="/savepic")
-    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
-    public RedirectView savePicUser(UserEntity user, @RequestParam("picture") MultipartFile multipartFile) throws IOException {
-        return userService.savePicUser(user, multipartFile);
+    @PostMapping(value="/savepic/{id}")
+    public ResponseEntity savePicUser(@PathVariable("id") int id, @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+        return tryHandle(() -> {
+            userService.savePicUser(id, multipartFile);
+            return new ResponseEntity(HttpStatus.OK);
+        });
     }
 
+    @GetMapping(value="/pic/{id}")
+    public ResponseEntity<byte[]> getPicUser(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            return userService.getUserPic(id);
+        });
+    }
 }

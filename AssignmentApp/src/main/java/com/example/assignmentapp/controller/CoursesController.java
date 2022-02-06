@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,6 +71,22 @@ public class CoursesController extends BaseController {
          return tryHandle(() -> {
             PaginationResult<CourseDto> list = courseService.getAllCoursesPagination(form);
             return new ResponseEntity<>(list, HttpStatus.OK);
+        });
+    }
+
+    @PostMapping(value="/savepic/{id}")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity savePicUser(@PathVariable("id") int id, @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+        return tryHandle(() -> {
+            courseService.savePicCourse(id, multipartFile);
+            return new ResponseEntity(HttpStatus.OK);
+        });
+    }
+
+    @GetMapping(value="/pic/{id}")
+    public ResponseEntity<byte[]> getPicUser(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            return courseService.getCoursePic(id);
         });
     }
 }

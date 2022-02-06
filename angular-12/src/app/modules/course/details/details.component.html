@@ -1,10 +1,10 @@
-<h1>Details</h1>
+<h1>Course Details</h1>
 <div class="row">
   <div class="col-md-4" *ngIf="course">
     <div class="card">
       <img
         class="card-img-top"
-        src="assets/images/big/img1.jpg"
+        [src]="imageHelper.sourceImageCourse(course.idcourse)"
         alt="Card image cap"
       />
       <div class="card-body">
@@ -77,7 +77,7 @@
     <div class="card">
       <img
         class="card-img-top"
-        src="assets/images/big/img1.jpg"
+        [src]="imageHelper.sourceImageUser(course!.user.iduser)"
         alt="Card image cap"
       />
       <div class="card-body">

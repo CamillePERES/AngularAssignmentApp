@@ -109,7 +109,7 @@
           <div class="card">
             <img
               class="card-img-top"
-              src="assets/images/big/img1.jpg"
+              [src]="imageHelper.sourceImageCourse(co.idcourse)"
               alt="Card image cap"
             />
             <div class="card-body">
@@ -212,6 +212,55 @@
           >
             Is required
           </mat-error>
+        </div>
+        <div class="col-md-12">
+          <ng-container *ngIf="image != null">
+            <div class="d-flex flex-col m-2 p-4 shadow rounded-2xl bg-card">
+              <div class="d-flex items-center justify-content-center">
+                <img
+                  class="object-scale-down h-48 w-96"
+                  mat-card-image
+                  [src]="image.buffer"
+                />
+              </div>
+
+              <div
+                *ngIf="progress != null && progress.value > 0"
+                class="flex flex-col flex-auto justify-center text-center text-sm font-medium"
+              >
+                <mat-progress-bar
+                  [mode]="determinate"
+                  [value]="progress.value"
+                ></mat-progress-bar>
+              </div>
+              <div
+                class="flex flex-col flex-auto justify-center text-center text-sm font-medium"
+              >
+                <div class="truncate" [matTooltip]="image.file.name">
+                  {{ image.file.name }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="flex flex-col items-center mt-4 mb-4 sm:mt-0 md:mt-4">
+            <button
+            type="button btn-lg"
+              class="ml-4 btn btn-primary"
+              (click)="fileInput.click()"
+            >
+              <mat-icon>upload</mat-icon>
+              <span class="ml-2 mr-1">Upload Picture</span>
+              <input
+                #fileInput
+                type="file"
+                accept="image/png, image/jpeg"
+                (change)="selectFiles($event)"
+                style="display: none"
+              />
+            </button>
+            <mat-error *ngIf="image === null">Image is required </mat-error>
+          </div>
         </div>
       </div>
     </form>

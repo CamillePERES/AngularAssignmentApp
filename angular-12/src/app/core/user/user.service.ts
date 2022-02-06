@@ -1,8 +1,10 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { BaseApiService } from "../base/baseapi.service";
+import { ProgressAction } from "../core.types";
 import { IdentityService } from "../identity/identity.service";
 import { LoginResult, LoginForm, User, UserForm } from "./user.type";
 
@@ -35,11 +37,11 @@ export class UserService extends BaseApiService
     await this.getIdentityAsync();
   }
 
-
   public async createUserAsync(form: UserForm) : Promise<User | null> {
     try{
-      const result = this.http.post<User>(`${environment.apiBaseUrl}/users/signup`, form).toPromise();
-      this.setLocalStorage('user', result);
+      const result = await this.http.post<User>(`${environment.apiBaseUrl}/users/signup`, form).toPromise();
+      //this.setLocalStorage('user', result);
+      return result;
     }
     catch(error:any){
       this.toast.error("Account not created","Register");
@@ -115,5 +117,36 @@ export class UserService extends BaseApiService
 
   private async getIdentityAsync(): Promise<void> {
     this.identityService.identity = await this.http.get<User>(`${environment.apiBaseUrl}/users/me`).toPromise();
+  }
+
+  public uploadPicture(userid: number, file: File, callback: ProgressAction): void {
+
+    callback({ value: 0, filename: file.name });
+
+    const observer = {
+      next: (event: any) => {
+        if (event.type === HttpEventType.UploadProgress) callback({value: Math.round(100 * event.loaded / event.total), filename: file.name });
+        else if (event instanceof HttpResponse) callback({ value: 100, filename: file.name});
+      },
+      error: (err: any) => {
+        callback({ value: 0, filename: file.name });
+      }
+    }
+
+    this.upload(userid, file).subscribe(observer);
+  }
+
+  private upload(userid: number, file: File): Observable<HttpEvent<any>> {
+
+    const formData: FormData = new FormData();
+
+    formData.append('picture', file);
+
+    const req = new HttpRequest('POST', `${environment.apiBaseUrl}/users/savepic/${userid}`, formData, {
+        reportProgress: true,
+        responseType: 'json'
+    });
+
+    return this.http.request(req);
   }
 }

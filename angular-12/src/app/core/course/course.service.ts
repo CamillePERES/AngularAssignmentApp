@@ -1,12 +1,12 @@
 import { Course, CourseForm, CourseSearchForm, CourseFormUpdate} from './course.type';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import { Injectable } from '@angular/core';
 import { environment } from "src/environments/environment";
 import { Observable } from 'rxjs';
 import { BaseApiService } from '../base/baseapi.service';
 import { Assignment } from '../assignments/assignment.type';
-import { PaginationResult } from '../core.types';
+import { PaginationResult, ProgressAction } from '../core.types';
 
 @Injectable({
   providedIn: "root",
@@ -71,5 +71,36 @@ export class CourseService extends BaseApiService {
 
   public async searchCoursesAsync(form: CourseSearchForm): Promise<PaginationResult<Course>> {
     return this.tryPostAsync('/courses/search', form);
+  }
+
+  public uploadPicture(courseid: number, file: File, callback: ProgressAction): void {
+
+    callback({ value: 0, filename: file.name });
+
+    const observer = {
+      next: (event: any) => {
+        if (event.type === HttpEventType.UploadProgress) callback({value: Math.round(100 * event.loaded / event.total), filename: file.name });
+        else if (event instanceof HttpResponse) callback({ value: 100, filename: file.name});
+      },
+      error: (err: any) => {
+        callback({ value: 0, filename: file.name });
+      }
+    }
+
+    this.upload(courseid, file).subscribe(observer);
+  }
+
+  private upload(courseid: number, file: File): Observable<HttpEvent<any>> {
+
+    const formData: FormData = new FormData();
+
+    formData.append('picture', file);
+
+    const req = new HttpRequest('POST', `${environment.apiBaseUrl}/courses/savepic/${courseid}`, formData, {
+        reportProgress: true,
+        responseType: 'json'
+    });
+
+    return this.http.request(req);
   }
 }

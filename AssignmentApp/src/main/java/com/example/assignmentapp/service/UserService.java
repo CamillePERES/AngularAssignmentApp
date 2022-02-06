@@ -9,8 +9,12 @@ import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.repositories.IUserRepository;
 import com.example.assignmentapp.security.JwtTokenProvider;
 import com.example.assignmentapp.util.FileUploadUtil;
+import com.example.assignmentapp.util.IAuthenticationFacade;
+import com.example.assignmentapp.util.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -21,7 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +47,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
 
 
     public List<UserEntity> getAllUser() {
@@ -90,17 +99,25 @@ public class UserService {
         return jwtTokenProvider.createToken(login, userRepository.getUserByLogin(login).getRole());
     }
 
-    public RedirectView savePicUser(UserEntity user, MultipartFile multipartFile) throws IOException {
+    @Transactional
+    public void savePicUser(int id, MultipartFile multipartFile) throws IOException, UserException {
 
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        user.setPicture(fileName);
+        UserEntity user = this.getUserById(id);
 
-        UserEntity savedUser = userRepository.save(user);
-        String uploadDir = "user-pictures/" + savedUser.getIduser();
+        List<String> term = Arrays.asList("jpeg", "jpg", "png", "gif");
 
-        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        boolean isOk = term.stream().anyMatch(t -> multipartFile.getOriginalFilename().toLowerCase().endsWith(t));
 
-        return new RedirectView("/pictures", true);
+        if(isOk){
+            user.setPicturename(multipartFile.getOriginalFilename());
+            user.setPicturebytes(multipartFile.getBytes());
+            user.setPicturecontenttype(multipartFile.getContentType());
+            userRepository.saveAndFlush(user);
+        }
     }
 
+    public ResponseEntity<byte[]> getUserPic(int id) throws UserException {
+        UserEntity user = this.getUserById(id);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(user.getPicturecontenttype())).body(user.getPicturebytes());
+    }
 }

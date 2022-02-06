@@ -15,6 +15,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/core/user/user.type';
 import { TouchSequence } from 'selenium-webdriver';
+import { Picture, ProgressUpload } from 'src/app/core/core.types';
+import { ImageHelper } from 'src/app/core/helpers/image.helper';
 
 @Component({
   selector: 'app-course-details',
@@ -69,7 +71,8 @@ export class DetailsComponent implements OnInit {
     private assignmentService: AssignmentService,
     private modalService: NgbModal,
     private router: Router,
-    private identityService: IdentityService
+    private identityService: IdentityService,
+    public imageHelper: ImageHelper
     ) {
 
    }

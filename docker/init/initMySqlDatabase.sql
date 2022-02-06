@@ -5,7 +5,9 @@ CREATE TABLE user(
         login    Varchar (500) NOT NULL ,
         password Varchar (500) NOT NULL ,
         role     Varchar (500) NOT NULL,
-        picture Varchar(64)
+        picturename Varchar (255),
+        picturebytes  LONGBLOB,
+        picturecontenttype Varchar(255)
 	,CONSTRAINT user_PK PRIMARY KEY (iduser)
 )ENGINE=InnoDB;
 
@@ -13,7 +15,10 @@ CREATE TABLE course(
         idcourse  Int  Auto_increment  NOT NULL ,
         name Varchar (500) NOT NULL ,
         description Varchar(500) NOT NULL,
-        iduser Int NOT NULL
+        iduser Int NOT NULL,
+        picturename Varchar (255),
+        picturebytes  LONGBLOB,
+        picturecontenttype Varchar(255)
 	,CONSTRAINT course_PK PRIMARY KEY (idcourse)
 
 	,CONSTRAINT course_user_FK FOREIGN KEY (iduser) REFERENCES user(iduser)

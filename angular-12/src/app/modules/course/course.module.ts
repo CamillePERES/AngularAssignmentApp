@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import {MatBadgeModule} from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -42,7 +43,8 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatBadgeModule,
     NgbDatepickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule,
   ]
 })
 export class CourseModule { }

@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { IdentityService } from 'src/app/core/identity/identity.service';
 import { User } from 'src/app/core/user/user.type';
+import { ImageHelper } from 'src/app/core/helpers/image.helper';
 //declare var $: any;
 
 @Component({
@@ -18,7 +19,12 @@ export class NavigationComponent implements OnInit {
 
   public showSearch = false;
 
-  constructor(private userService : UserService, private router: Router, private identity: IdentityService) {
+  constructor(
+    private userService : UserService,
+    private router: Router,
+    private identity: IdentityService,
+    public imageHelper: ImageHelper
+    ) {
 
   }
 

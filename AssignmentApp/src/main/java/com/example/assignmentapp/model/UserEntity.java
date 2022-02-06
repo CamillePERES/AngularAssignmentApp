@@ -16,7 +16,9 @@ public class UserEntity {
     private String login;
     private String password;
     private String role;
-    private String picture;
+    private String picturename;
+    private byte[] picturebytes;
+    private String picturecontenttype;
     private Collection<CourseEntity> courses;
     private Collection<WorkEntity> works;
 
@@ -105,13 +107,33 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "picture")
-    public String getPicture() {
-        return picture;
+    @Column(name = "picturename")
+    public String getPicturename() {
+        return picturename;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPicturename(String picturename) {
+        this.picturename = picturename;
+    }
+
+    @Basic
+    @Column(name = "picturebytes")
+    public byte[] getPicturebytes() {
+        return picturebytes;
+    }
+
+    public void setPicturebytes(byte[] picturebytes) {
+        this.picturebytes = picturebytes;
+    }
+
+    @Basic
+    @Column(name = "picturecontenttype")
+    public String getPicturecontenttype() {
+        return picturecontenttype;
+    }
+
+    public void setPicturecontenttype(String picturecontenttype) {
+        this.picturecontenttype = picturecontenttype;
     }
 
     @Override
@@ -145,11 +167,4 @@ public class UserEntity {
         this.works = works;
     }
 
-    @Transient
-    public String getPhotosImagePath() {
-        if (picture == null){
-            return null;
-        }
-        return "/user-picture/" + iduser + "/" + picture;
-    }
 }

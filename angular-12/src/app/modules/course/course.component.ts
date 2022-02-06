@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginationResult } from 'src/app/core/core.types';
+import { PaginationResult, Picture, ProgressUpload } from 'src/app/core/core.types';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -11,6 +11,8 @@ import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { IdentityService } from 'src/app/core/identity/identity.service';
 import { User } from 'src/app/core/user/user.type';
+import { ToastrService } from 'ngx-toastr';
+import { ImageHelper } from 'src/app/core/helpers/image.helper';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -46,12 +48,17 @@ export class CourseComponent implements OnInit {
   get pageSize() { return this.paginationform.pageSize; }
   set pageSize(value: number) { this.paginationform.pageSize = value; }
 
+  public image: Picture | null = null;
+  public progress: ProgressUpload | null = null;
+
   constructor(
     private courseService: CourseService,
     private routeur: Router,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private identityService: IdentityService
+    private identityService: IdentityService,
+    private toast: ToastrService,
+    public imageHelper: ImageHelper
     ) {
 
   }
@@ -142,8 +149,30 @@ export class CourseComponent implements OnInit {
       this.createForm.enable();
       return;
     }
+    this.uploadImage(result);
+  }
 
-    this.closeModal();
-    this.details(result);
+  async selectFiles(event: any): Promise<void> {
+    const selected: FileList = event.target.files;
+    let file: File = selected[0];
+    if (file.size > 0) {
+      const mimeType = file.type;
+      if (mimeType.match(/image\/(jpe?g|png|gif|bmp)/) !== null) {
+        const buffer = await this.imageHelper.getBase64(file);
+        this.image = { file: file, buffer: buffer };
+        this.progress = { value: 0, filename: file.name };
+      }
+    }
+  }
+
+  private uploadImage(course: Course){
+    this.courseService.uploadPicture(course.idcourse, this.image!.file, (progress: ProgressUpload) => {
+      this.progress = progress;
+      if (progress.value === 100){
+        this.toast.success('Image is uploaded');
+        this.closeModal();
+        this.details(course);
+      }
+    })
   }
 }
