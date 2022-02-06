@@ -15,3 +15,11 @@ export interface User{
   login: string;
   role: string;
 }
+
+export interface UserForm{
+  name: string;
+  firstname: string;
+  login: string;
+  password: string;
+  role:string;
+}

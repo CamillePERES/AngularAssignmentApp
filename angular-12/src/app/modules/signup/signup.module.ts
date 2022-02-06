@@ -1,3 +1,4 @@
+import { MatInputModule } from '@angular/material/input';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SignupComponent } from './signup.component';
@@ -7,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -22,10 +24,13 @@ const routes: Routes = [
   imports: [
     CommonModule,
     NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,
     MatSelectModule,
+    MatInputModule,
     RouterModule.forChild(routes)
   ]
 })

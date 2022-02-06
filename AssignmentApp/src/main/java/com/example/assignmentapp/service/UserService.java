@@ -2,6 +2,7 @@ package com.example.assignmentapp.service;
 
 import com.example.assignmentapp.dto.LoginFormDto;
 import com.example.assignmentapp.dto.LoginResultDto;
+import com.example.assignmentapp.dto.UserFormCreateDto;
 import com.example.assignmentapp.enumeration.UserExceptionType;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.UserEntity;
@@ -57,14 +58,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserEntity createUser(UserEntity user) throws UserException {
-        UserEntity userLoginExists = userRepository.getUserByLogin(user.getLogin());
+    public UserEntity createUser(UserFormCreateDto userFormCreateDto) throws UserException {
+        UserEntity userLoginExists = userRepository.getUserByLogin(userFormCreateDto.getLogin());
         if (userLoginExists != null){
             throw new UserException(UserExceptionType.ALREADY_EXIST_CREATE);
         }
         else{
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
+            userFormCreateDto.setPassword(passwordEncoder.encode(userFormCreateDto.getPassword()));
+            return userRepository.save(new UserEntity(userFormCreateDto.getName(), userFormCreateDto.getFirstname(), userFormCreateDto.getLogin(), userFormCreateDto.getPassword(), userFormCreateDto.getRole()));
         }
     }
 
