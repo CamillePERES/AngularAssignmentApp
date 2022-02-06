@@ -4,19 +4,10 @@ import java.sql.Date;
 
 public class AssignmentFormCreateDto {
 
-    private int idAss;
     private int courseId;
     private String name;
     private Date date;
     private String description;
-
-    public int getIdAss() {
-        return idAss;
-    }
-
-    public void setIdAss(int idAss) {
-        this.idAss = idAss;
-    }
 
     public int getCourseId() {
         return courseId;

@@ -42,6 +42,7 @@ export class AssignmentService extends BaseApiService {
 
 
   public async createAssignmentAsync(form: AssignmentForm): Promise<Assignment | null>{
+    console.log(form)
     try{
       return await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
     }catch(error:any){
