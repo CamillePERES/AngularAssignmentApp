@@ -1,11 +1,13 @@
-import { CourseService } from './../../core/course/course.service';
+
 import { Component, OnInit } from '@angular/core';
-import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationResult } from 'src/app/core/core.types';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { CourseService } from 'src/app/core/course/course.service';
+import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 

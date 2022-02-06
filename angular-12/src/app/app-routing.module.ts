@@ -1,10 +1,7 @@
-import { CourseComponent } from './modules/course/course.component';
-import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { EmptyComponent } from './layouts/empty/empty.component';
-
 import { FullComponent } from './layouts/full/full.component';
-import { AssignmentComponent } from './modules/assignment/assignment.component';
+
 import { NoAuthGuard } from './core/guards/noAuth.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 
