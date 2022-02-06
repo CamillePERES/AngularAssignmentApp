@@ -1,7 +1,126 @@
-<h1>Assignments</h1>
+<h1>Assignment Details</h1>
 <div class="row">
+  <div class="col-md-4" *ngIf="assignment">
+    <div class="card">
+      <div class="card-body">
+        <div *ngIf="!editMode">
+          <div class="d-flex" style="justify-content: right" *ngIf="!editMode">
+            <button class="btn btn-primary" (click)="editAssignment()">
+              Edit
+            </button>
+          </div>
+          <h2 class="card-title">
+            {{ assignment.name }}
+          </h2>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3"
+                >Description</span
+              >
+            </div>
+            <input
+              [disabled]="true"
+              type="text"
+              [value]="assignment!.description"
+              class="form-control"
+              id="basic-url"
+              aria-describedby="basic-addon3"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3"
+                >To deliver on the:</span
+              >
+            </div>
+            <input
+              [disabled]="true"
+              type="text"
+              [value]="assignment!.date"
+              class="form-control"
+              id="basic-url"
+              aria-describedby="basic-addon3"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <mat-slide-toggle [disabled]="true"
+            [checked] = "assignment.isclosed"
+              >Assignment closed:
+              {{ assignment.isclosed }}</mat-slide-toggle
+            >
+          </div>
+        </div>
+        <div *ngIf="editMode && editAssignmentForm != null">
+          <form [formGroup]="editAssignmentForm">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Name</span>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="basic-url"
+                aria-describedby="basic-addon3"
+                [formControlName]="'name'"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3"
+                  >Description</span
+                >
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="basic-url"
+                aria-describedby="basic-addon3"
+                [formControlName]="'description'"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3"
+                  >To deliver on the:</span
+                >
+              </div>
+              <input
+                class="form-control"
+                [value]="assignment!.date"
+                [formControlName]="'date'"
+                ngbDatepicker
+                #d="ngbDatepicker"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar fa fa-calendar"
+                  (click)="d.toggle()"
+                  type="button"
+                ></button>
+              </div>
+              <div class="input-group mb-3">
+                <mat-slide-toggle (change)="onChange()"
+                [checked] = "assignment.isclosed"
+                  >Assignment closed:
+                  {{ assignment.isclosed }}</mat-slide-toggle
+                >
+              </div>
+            </div>
+            <div class="d-flex" style="justify-content: right" *ngIf="editMode">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="saveAssignmentUpdate()"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-12" *ngIf="user && assignment">
-    <h1>Work</h1>
     <app-work-student
       *ngIf="isStudent"
       [idass]="assignment"
@@ -9,104 +128,3 @@
     <app-work-professor *ngIf="isTeacher" [idass]="assignment"></app-work-professor>
   </div>
 </div>
-<!--
-<div class="card">
-  <div class="card-body">
-      <div class="d-flex" style="justify-content: right" *ngIf="!editMode">
-        <button class="btn btn-primary" (click)="editAssignment()">Edit</button>
-      </div>
-      <h2 [routerLink]="['/work']" class="card-title">{{ ass.name }}</h2>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon3">Description</span>
-        </div>
-        <input
-          [disabled]="true"
-          type="text"
-          [value]="ass.description"
-          class="form-control"
-          id="basic-url"
-          aria-describedby="basic-addon3"
-        />
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon3"
-            >To deliver on the:</span
-          >
-        </div>
-        <input
-          [disabled]="true"
-          type="text"
-          [value]="ass.date"
-          class="form-control"
-          id="basic-url"
-          aria-describedby="basic-addon3"
-        />
-      </div>
-
-    <div *ngIf="editMode && editAssignmentForm != null">
-      <form [formGroup]="editAssignmentForm">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3">Name</span>
-          </div>
-          <input
-            type="text"
-            [value]="ass.name"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-            [formControlName]="'name'"
-          />
-        </div>
-
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3">Description</span>
-          </div>
-          <input
-            [disabled]="true"
-            type="text"
-            [value]="ass.description"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-            [formControlName]="'description'"
-          />
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3"
-              >To deliver on the:</span
-            >
-          </div>
-          <input
-            [disabled]="true"
-            type="text"
-            [value]="ass.date"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-            [formControlName]="'date'"
-          />
-        </div>
-
-        <div class="d-flex" style="justify-content: right" *ngIf="editMode">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="saveAssignmentUpdate()"
-          >Save
-          </button>
-        </div>
-      </form>
-
-
-
-
-    </div>
-  </div>
-
-</div>
--->

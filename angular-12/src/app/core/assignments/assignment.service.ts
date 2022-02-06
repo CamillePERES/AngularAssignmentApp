@@ -60,8 +60,9 @@ export class AssignmentService extends BaseApiService {
   }
 
   public async updateAssignment(form: AssignmentFormUpdate): Promise<Assignment | null>{
+    console.log(form)
     try{
-      return await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
+      return await this.http.put<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
     }catch(error){
       this.toast.error("Couldn't edit the assignment","Assignment");
     }

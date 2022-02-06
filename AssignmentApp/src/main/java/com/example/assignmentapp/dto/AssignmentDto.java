@@ -23,7 +23,6 @@ public class AssignmentDto {
         this.course = new CourseDto(entity.getCourseEntity());
     }
 
-
     public int getIdass() {
         return idass;
     }

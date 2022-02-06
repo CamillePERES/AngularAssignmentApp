@@ -115,6 +115,7 @@ public class AssignmentService {
         ass.setName(assignmentFormUpdateDto.getName());
         ass.setDescription(assignmentFormUpdateDto.getDescription());
         ass.setDate(assignmentFormUpdateDto.getDate());
+        ass.setIsclosed(assignmentFormUpdateDto.isIsclosed());
 
         return assignmentRepository.saveAndFlush(ass);
     }
