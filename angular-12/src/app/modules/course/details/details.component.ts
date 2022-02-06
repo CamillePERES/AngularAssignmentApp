@@ -120,7 +120,12 @@ export class DetailsComponent implements OnInit {
     this.createForm.disable();
 
     const value = this.createForm.getRawValue();
-    const result = await this.assignmentService.createAssignmentAsync(value);
+    const result = await this.assignmentService.createAssignmentAsync({
+      courseId: this.course!.idcourse,
+      name: value.name,
+      description: value.description,
+      date: new Date(`${value.date.year}-${value.date.month}-${value.date.day}`)
+    });
 
     if(result == null){
       this.createForm.enable();
