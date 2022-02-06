@@ -1,0 +1,23 @@
+<p>my-work-student works!</p>
+<h1>My work</h1>
+
+<div class="row d-flex justify-content-center">
+
+  <div class="col-md-3 list-work">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center"><h1>Submitted</h1></div>
+      <div class="col-12" *ngFor="let work of asssub">
+        <app-work-item [work]="buildWork(work)" (submitevaluation)="submitEvaluation($event)"></app-work-item>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 list-work">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center"><h1>Evaluated</h1></div>
+      <div class="col-12" *ngFor="let work of asseva">
+        <app-work-item [work]="buildWork(work)"></app-work-item>
+      </div>
+    </div>
+  </div>
+
+</div>

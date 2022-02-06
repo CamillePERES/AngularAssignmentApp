@@ -6,6 +6,8 @@ import { WorkProfessorComponent } from './work-professor/work-professor.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkItemComponent } from './work-item/work-item.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { MyWorkStudentComponent } from './my-work-student/my-work-student.component';
+import { MyWorkStudentItemComponent } from './my-work-student/my-work-student-item/my-work-student-item.component';
 
 
 
@@ -13,7 +15,9 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     WorkStudentComponent,
     WorkProfessorComponent,
-    WorkItemComponent
+    WorkItemComponent,
+    MyWorkStudentComponent,
+    MyWorkStudentItemComponent
   ],
   imports: [
     CommonModule,

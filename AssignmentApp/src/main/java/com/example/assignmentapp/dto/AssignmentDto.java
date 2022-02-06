@@ -2,7 +2,6 @@ package com.example.assignmentapp.dto;
 
 import com.example.assignmentapp.enumeration.EnumWorkStatus;
 import com.example.assignmentapp.model.AssignmentEntity;
-import com.example.assignmentapp.model.WorkEntity;
 
 import java.sql.Date;
 
