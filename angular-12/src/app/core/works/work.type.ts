@@ -8,6 +8,7 @@ export interface Work{
   comment: string;
   status: string;
   user: User;
+  deliverydate : Date;
   assignment: Assignment
 }
 

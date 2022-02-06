@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { BaseApiService } from "../base/baseapi.service";
 import { IdentityService } from "../identity/identity.service";
-import { Work } from "./work.type";
+import { Work, WorkCreateForm } from "./work.type";
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,10 @@ export class WorkService extends BaseApiService
 
   public async getWorkOfAssignmentById(id: number): Promise<Work | null>{
     return this.tryGetAsync<Work | null>(`/works/assignment/${id}`);
+  }
+
+  public async createWork(form: WorkCreateForm): Promise<Work> {
+    return this.tryPostAsync<WorkCreateForm, Work>(`/works`, form);
   }
 
 }
