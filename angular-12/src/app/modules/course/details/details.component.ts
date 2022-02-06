@@ -64,36 +64,14 @@ export class DetailsComponent implements OnInit {
     this.editMode = false;
 
     try{
-      this.course = await this.courseService.updateCourse({idCourse: this.course!.idcourse, name: this.editForm!.value.name, description: this.editForm!.value.description});
+      this.course = await this.courseService.updateCourse({
+        idCourse: this.course!.idcourse,
+        name: this.editForm!.value.name,
+        description: this.editForm!.value.description});
     }catch(error){
       this.toast.error("Update failed");
     }
     this.editForm = null;
-  }
-
-  public editAssignment(){
-      this.editMode = true;
-
-      this.editAssignmentForm = this.formBuilder.group({
-        name:[this.assignment?.name, Validators.required],
-        description:[this.assignment?.description, Validators.required],
-        date:[this.assignment?.date, Validators.required]
-      })
-  }
-
-  public async saveAssignmentUpdate(){
-      this.editMode = false;
-      try{
-        this.assignment = await this.assignmentService.updateAssignment({
-          idAss: this.assignment!.idass,
-          name:this.editAssignmentForm!.value.name,
-          description: this.editAssignmentForm?.value.description,
-          date: this.editAssignmentForm?.value.date
-        })
-
-      }catch(error){
-        this.toast.error("Update failed");
-      }
   }
 
   public openVerticallyCentered(content: NgbModal): void {

@@ -1,5 +1,9 @@
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { AssignmentService } from 'src/app/core/assignments/assignment.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Assignment } from 'src/app/core/assignments/assignment.type';
@@ -15,6 +19,8 @@ import { User } from 'src/app/core/user/user.type';
 export class DetailsComponent implements OnInit, OnDestroy {
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  public editAssignmentForm: FormGroup | null = null;
+  public editMode: boolean = false;
 
   public user: User | null = null;
   public assignment: Assignment | null = null;
@@ -24,8 +30,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private identityService: IdentityService
-  ) { }
+    private identityService: IdentityService,
+    private toast: ToastrService,
+    private formBuilder: FormBuilder,
+    private assignmnentService: AssignmentService
+  ) {
+    this.editAssignmentForm = this.formBuilder.group({
+      name:['', Validators.required],
+      description:['', Validators.required],
+      date:['', Validators.required]
+    });
+   }
 
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
@@ -38,6 +53,43 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.identityService.identity$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(user => this.user = user);
+  }
+
+   public editAssignment(){
+
+    if(this.assignment === null){
+      return;
+    }
+      this.editMode = true;
+
+      const date = new Date(this.assignment.date);
+      console.log(date)
+      let datef = {  year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()};
+
+      this.editAssignmentForm = this.formBuilder.group({
+        name:[this.assignment.name, Validators.required],
+        description:[this.assignment.description, Validators.required],
+        date:[datef, Validators.required]
+      });
+  }
+
+  public async saveAssignmentUpdate(){
+      this.editMode = false;
+      try{
+        const value = this.editAssignmentForm!.getRawValue();
+        this.assignment = await this.assignmnentService.updateAssignment({
+          idAss: this.assignment!.idass,
+          name:this.editAssignmentForm!.value.name,
+          description: this.editAssignmentForm!.value.description,
+          date: new Date(`${value.date.year}-${value.date.month}-${value.date.day}`)
+        })
+
+      }catch(error){
+        this.toast.error("Update failed");
+      }
+      this.editAssignmentForm = null;
   }
 
 }
