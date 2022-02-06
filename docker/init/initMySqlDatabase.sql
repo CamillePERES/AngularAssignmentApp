@@ -4,15 +4,15 @@ CREATE TABLE user(
         firstname   Varchar (500) NOT NULL ,
         login    Varchar (500) NOT NULL ,
         password Varchar (500) NOT NULL ,
-        role     Varchar (500) NOT NULL ,
-        picture Varchar (64)
+        role     Varchar (500) NOT NULL,
+        picture Varchar(64)
 	,CONSTRAINT user_PK PRIMARY KEY (iduser)
 )ENGINE=InnoDB;
 
 CREATE TABLE course(
         idcourse  Int  Auto_increment  NOT NULL ,
         name Varchar (500) NOT NULL ,
-        description Varchar (500) NOT  NULL ,
+        description Varchar(500) NOT NULL,
         iduser Int NOT NULL
 	,CONSTRAINT course_PK PRIMARY KEY (idcourse)
 
@@ -22,8 +22,9 @@ CREATE TABLE course(
 CREATE TABLE assignment(
         idass   Int  Auto_increment  NOT NULL ,
         name  Varchar (500) NOT NULL ,
+        description Varchar(500) NOT NULL,
         date Date NOT NULL ,
-        description Varchar (500) NOT NULL ,
+        isclosed BOOLEAN NOT NULL,
         idcourse   Int NOT NULL
 	,CONSTRAINT assignment_PK PRIMARY KEY (idass)
 
@@ -33,10 +34,11 @@ CREATE TABLE assignment(
 CREATE TABLE work(
         idwork      Int  Auto_increment  NOT NULL ,
         name     Varchar (500) NOT NULL ,
-        description Varchar (500) NOT NULL,
+        description Varchar(500) NOT NULL,
         grade    Int NOT NULL ,
         comment Varchar (500) NOT NULL ,
         status  Varchar (500) NOT NULL ,
+        deliverydate Date NOT NULL,
         iduser       Int NOT NULL ,
         idass        Int NOT NULL
 	,CONSTRAINT work_PK PRIMARY KEY (idwork)
