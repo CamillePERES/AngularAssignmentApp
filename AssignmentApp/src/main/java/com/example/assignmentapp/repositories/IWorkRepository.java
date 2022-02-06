@@ -10,6 +10,6 @@ import java.util.List;
 public interface IWorkRepository extends JpaRepository<WorkEntity, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM work w WHERE w.idass = :idAss")
-    List<WorkEntity> getAllWorksByIdAss(@Param("idass") Integer idAss);
+    List<WorkEntity> getAllWorksByIdAss(@Param("idAss") Integer idAss);
 
 }

@@ -66,7 +66,7 @@ public class CoursesController extends BaseController {
 
     @PostMapping(value="/search")
     public ResponseEntity<PaginationResult<CourseDto>> search(@RequestBody CourseSearchForm form) {
-        return tryHandle(() -> {
+         return tryHandle(() -> {
             PaginationResult<CourseDto> list = courseService.getAllCoursesPagination(form);
             return new ResponseEntity<>(list, HttpStatus.OK);
         });

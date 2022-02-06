@@ -6,7 +6,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { NgbModalModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsResolver } from './resolver/course.details.resolver';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const routes: Routes = [
   {
@@ -33,6 +35,8 @@ const routes: Routes = [
     NgbPaginationModule,
     NgbModalModule,
     FormsModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule
   ]
 })

@@ -4,7 +4,7 @@ package com.example.assignmentapp.dto;
 public class CourseFormCreateDto {
 
     private String name;
-    private int idUser;
+
     private String description;
 
     public String getName() {
@@ -13,14 +13,6 @@ public class CourseFormCreateDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
     }
 
     public String getDescription() {

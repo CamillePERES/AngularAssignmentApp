@@ -58,11 +58,7 @@ public class CourseService {
         UserIdentity authIdUser = authenticationFacade.getUser();
 
         //recuperer l'id de l'user qui a ete passe dans le formulaire de creation de matiere
-        UserEntity user = userService.getUserById(courseFormCreate.getIdUser());
-
-        if(user.getIduser() != authIdUser.getIduser()){
-            throw new CourseException(CourseExceptionType.USER_NOT_OWNER);
-        }
+        UserEntity user = userService.getUserById(authIdUser.getIduser());
 
         //test s'il y a deja une matiere avec le meme nom pour ce user
         Collection<CourseEntity> courses = user.getCourses();

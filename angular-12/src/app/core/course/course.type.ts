@@ -12,7 +12,6 @@ export interface Course{
 export interface CourseForm{
   name: string;
   description: string;
-  //iduser;
 }
 
 export interface CourseSearchForm {

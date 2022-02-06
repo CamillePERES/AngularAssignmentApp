@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationResult } from 'src/app/core/core.types';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CourseService } from 'src/app/core/course/course.service';
 import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -22,6 +23,9 @@ export class CourseComponent implements OnInit {
   searchInputCourse: FormControl = new FormControl();
   searchInputUser: FormControl = new FormControl();
 
+  // creation
+  public createForm: FormGroup | null = null;
+  private modal : NgbModalRef | null = null;
 
   // Pagination
   private paginationform: CourseSearchForm = { page: 1, pageSize: 5, courseName: '', userName: ''}
@@ -39,7 +43,9 @@ export class CourseComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
-    private routeur: Router
+    private routeur: Router,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder
     ) {
 
   }
@@ -95,5 +101,39 @@ export class CourseComponent implements OnInit {
   public details(value: Course): void {
     console.log(value)
     this.routeur.navigate([`/course/details/${value.idcourse}`])
+  }
+
+  public openVerticallyCentered(content: NgbModal): void {
+    this.createForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+    this.modal = this.modalService.open(content, { centered: true, backdrop : 'static', keyboard : false});
+  }
+
+  public closeModal(): void {
+    if(this.modal != null){
+      this.modal.close();
+      this.modal = null;
+    }
+  }
+
+  public async createCourse(): Promise<void> {
+
+    if(this.createForm == null || this.createForm.invalid)
+      return;
+
+    this.createForm.disable();
+
+    const value = this.createForm.getRawValue();
+    const result = await this.courseService.createCourseAsync(value)
+
+    if(result == null){
+      this.createForm.enable();
+      return;
+    }
+
+    this.closeModal();
+    this.details(result);
   }
 }
