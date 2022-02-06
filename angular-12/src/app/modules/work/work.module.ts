@@ -7,20 +7,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkItemComponent } from './work-item/work-item.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { MyWorkStudentComponent } from './my-work-student/my-work-student.component';
-import { MyWorkStudentItemComponent } from './my-work-student/my-work-student-item/my-work-student-item.component';
+import { RouterModule, Routes } from '@angular/router';
 
-
+const routes: Routes = [
+  {
+    path: 'student',
+    component: MyWorkStudentComponent,
+  }
+];
 
 @NgModule({
   declarations: [
     WorkStudentComponent,
     WorkProfessorComponent,
     WorkItemComponent,
-    MyWorkStudentComponent,
-    MyWorkStudentItemComponent
+    MyWorkStudentComponent
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
     NgbPaginationModule,
