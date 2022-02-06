@@ -14,6 +14,8 @@ export interface Assignment{
   date: Date;
   description: string;
   isclosed: boolean;
+  nbWork: number;
+  total: number;
   course: Course;
 }
 
