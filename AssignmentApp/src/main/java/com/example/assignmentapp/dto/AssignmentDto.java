@@ -1,5 +1,6 @@
 package com.example.assignmentapp.dto;
 
+import com.example.assignmentapp.enumeration.EnumWorkStatus;
 import com.example.assignmentapp.model.AssignmentEntity;
 import com.example.assignmentapp.model.WorkEntity;
 
@@ -12,6 +13,8 @@ public class AssignmentDto {
     private Date date;
     private String description;
     private boolean isclosed;
+    private int nbWork;
+    private int total;
     private CourseDto course;
 
     public AssignmentDto(AssignmentEntity entity) {
@@ -20,6 +23,10 @@ public class AssignmentDto {
         this.date = entity.getDate();
         this.description = entity.getDescription();
         this.isclosed = entity.getIsclosed();
+        this.nbWork = (int) entity.getWorks()
+                .stream()
+                .filter(work -> work.getStatus().equals(EnumWorkStatus.Evaluated.name())).count();
+        this.total = entity.getWorks().size();
         this.course = new CourseDto(entity.getCourseEntity());
     }
 
@@ -61,6 +68,22 @@ public class AssignmentDto {
 
     public void setIsclosed(boolean isclosed) {
         this.isclosed = isclosed;
+    }
+
+    public int getNbWork() {
+        return nbWork;
+    }
+
+    public void setNbWork(int nbWork) {
+        this.nbWork = nbWork;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public CourseDto getCourse() {

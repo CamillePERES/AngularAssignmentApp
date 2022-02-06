@@ -14,6 +14,7 @@ import { IdentityService } from 'src/app/core/identity/identity.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/core/user/user.type';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-course-details',
@@ -30,8 +31,29 @@ export class DetailsComponent implements OnInit {
   public assignment: Assignment | null = null;
   public editForm: FormGroup | null = null;
   editAssignmentForm: FormGroup | null = null;
-  displayedColumns: string[] = ['name', 'description', 'date','status', 'details'];
+  displayedColumnsStudent: string[] = ['name', 'description', 'date','status','details'];
+  displayedColumnsTeacher: string[] = ['name', 'description', 'date','status', 'nbWork','details'];
   dataSource = new MatTableDataSource<Assignment>(this.assignments);
+
+  get isTeacher (){
+    return this.user !== null && this.user.role === "TEACHER"
+  }
+
+  get columns(){
+    if(this.user === null){
+      return [];
+    }
+    else if (this.user.role === "TEACHER"){
+      return this.displayedColumnsTeacher;
+    }
+    else if(this.user.role === "STUDENT"){
+      return this.displayedColumnsStudent;
+    }
+    else{
+      return [];
+    }
+  }
+
 
   // creation
   public createForm: FormGroup | null = null;
