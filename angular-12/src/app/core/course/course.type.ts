@@ -7,7 +7,6 @@ export interface Course{
   description: string;
   assignment: Array<Assignment>;
   user: User;
-    //idUser;
 }
 
 export interface CourseForm{
@@ -21,4 +20,9 @@ export interface CourseSearchForm {
   pageSize: number;
   courseName: string;
   userName: string;
+}
+
+export interface CourseFormUpdate{
+  name: string;
+  description: string;
 }

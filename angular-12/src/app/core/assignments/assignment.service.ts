@@ -1,16 +1,20 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { BaseApiService } from "../base/baseapi.service";
 import { Assignment, AssignmentForm } from "./assignment.type";
 
 @Injectable({
   providedIn: "root",
 })
-export class AssignmentService {
 
-  constructor(private http: HttpClient, protected toast: ToastrService) {}
+export class AssignmentService extends BaseApiService {
+  constructor( http: HttpClient, toast: ToastrService) {
+      super(http, toast);
+  }
 
   public async getAssignmentAsync(): Promise<Array<Assignment>> {
     try {
@@ -30,6 +34,12 @@ export class AssignmentService {
     }
     return null;
   }
+
+
+  public getAssignmentsOfCourse(id: number): Observable<Array<Assignment>> {
+    return this.tryGet<Array<Assignment>>(`/assignments/course/${id}`);
+  }
+
 
   public async createAssignmentAsync(form: AssignmentForm): Promise<Assignment | null>{
     try{

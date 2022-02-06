@@ -1,19 +1,22 @@
+import { AssignmentService } from './../../../core/assignments/assignment.service';
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router"
-import { forkJoin, Observable } from "rxjs";
+import { forkJoin, Observable, pipe } from "rxjs";
+import { map } from "rxjs/operators";
 import { CourseService } from "src/app/core/course/course.service";
 import { Course } from "src/app/core/course/course.type";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CourseDetailsResolver implements Resolve<Course>
+export class CourseDetailsResolver implements Resolve<any>
 {
   /**
    * Constructor
    */
   constructor(
-      private service: CourseService
+      private service: CourseService,
+      private assignmentService: AssignmentService
   )
   {
   }
@@ -24,9 +27,17 @@ export class CourseDetailsResolver implements Resolve<Course>
    * @param route
    * @param state
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Course>
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
   {
     let id = route.params['id'];
-    return this.service.getCourseById(id);
+    return forkJoin([
+      this.service.getCourseById(id),
+      this.assignmentService.getAssignmentsOfCourse(id)
+    ]).pipe(
+      map(resp => {
+        return { course: resp[0], assignments: resp[1] }
+      }
+    ));
+
   }
 }

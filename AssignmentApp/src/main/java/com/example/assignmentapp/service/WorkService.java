@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,5 +103,10 @@ public class WorkService {
         wrk.setDescription(workFormUpdateDto.getDescription());
 
         return workRepository.saveAndFlush(wrk);
+    }
+
+    @Transactional
+    public List<WorkEntity> getWorksByIdAss(int idAssignment) {
+        return workRepository.getAllWorksByIdAss(idAssignment);
     }
 }

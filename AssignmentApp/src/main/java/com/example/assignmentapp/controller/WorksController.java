@@ -75,4 +75,16 @@ public class WorksController extends BaseController {
             return new ResponseEntity<>(new WorkDto(workUpdated), HttpStatus.OK);
         });
     }
+
+    @GetMapping("/assignment/{id}")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<List<WorkDto>> getWorkByIdAss(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            List<WorkDto> workList = workService.getWorksByIdAss(id)
+                    .stream()
+                    .map(wk -> new WorkDto(wk))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(workList, HttpStatus.OK);
+        });
+    }
 }
