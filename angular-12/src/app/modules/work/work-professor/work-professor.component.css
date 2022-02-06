@@ -1,0 +1,9 @@
+.list-work {
+  border: solid 1px #ccc;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+  height: 600px;
+  overflow-y: auto;
+}

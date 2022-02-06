@@ -1,20 +1,22 @@
 package com.example.assignmentapp.service;
 
-import com.example.assignmentapp.dto.WorkDto;
-import com.example.assignmentapp.dto.WorkFormCreateDto;
-import com.example.assignmentapp.dto.WorkFormEvaluationDto;
-import com.example.assignmentapp.dto.WorkFormUpdateDto;
+import com.example.assignmentapp.dto.*;
 import com.example.assignmentapp.enumeration.EnumWorkStatus;
 import com.example.assignmentapp.enumeration.WorkExceptionType;
 import com.example.assignmentapp.exceptions.AssignmentException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.exceptions.WorkException;
 import com.example.assignmentapp.model.AssignmentEntity;
+import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.model.UserEntity;
 import com.example.assignmentapp.model.WorkEntity;
 import com.example.assignmentapp.repositories.IWorkRepository;
 import com.example.assignmentapp.util.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +24,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -54,11 +57,22 @@ public class WorkService {
     }
 
     @Transactional
-    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, AssignmentException {
+    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, AssignmentException, WorkException {
 
         //on recupere l'idass et l'iduser passes dans le formulaire
-        UserEntity user = userService.getUserById(workFormCreateDto.getIdUser());
+        int authIdUser = authenticationFacade.getUser().getIduser();
+        UserEntity user = userService.getUserById(authIdUser);
         AssignmentEntity assignment = assignmentService.getAssigmentById(workFormCreateDto.getIdAss());
+
+        if(assignment.getIsclosed()){
+            throw new WorkException(WorkExceptionType.ASSIGNMENT_CLOSED);
+        }
+
+        WorkDto entity = this.getWorkStudentByIdAssignment(assignment.getIdass());
+
+        if(entity != null){
+            throw new WorkException(WorkExceptionType.STUDENT_HAVE_ALREADY_WORK);
+        }
 
         return workRepository.save(new WorkEntity(workFormCreateDto, user, assignment));
     }
@@ -117,5 +131,11 @@ public class WorkService {
         int authIdUser = authenticationFacade.getUser().getIduser();
         WorkEntity entity = workRepository.getWorkStudentByIdAssignment(id, authIdUser);
         return entity == null ? null : new WorkDto(entity);
+    }
+
+    public List<WorkDto> getAllWorkPagination(WorkSearchFormDto form) {
+        Specification<WorkEntity> filterStatus = (root, query, cb) -> cb.like(root.get("status"), form.getStatus());
+        Specification<WorkEntity> ofAss = (root, query, cb) -> cb.equal(root.get("assignmentEntity").get("idass"), form.getIdAss());
+        return workRepository.findAll(Specification.where(filterStatus).and(ofAss)).stream().map(WorkDto::new).collect(Collectors.toList());
     }
 }

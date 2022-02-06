@@ -4,9 +4,9 @@
     <h1>Work</h1>
     <app-work-student
       *ngIf="isStudent"
-      [idass]="assignment.idass"
+      [idass]="assignment"
     ></app-work-student>
-    <app-work-professor *ngIf="isTeacher"></app-work-professor>
+    <app-work-professor *ngIf="isTeacher" [idass]="assignment"></app-work-professor>
   </div>
 </div>
 <!--

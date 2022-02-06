@@ -5,6 +5,7 @@ import { WorkProfessorComponent } from './work-professor/work-professor.componen
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkItemComponent } from './work-item/work-item.component';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,7 +18,8 @@ import { WorkItemComponent } from './work-item/work-item.component';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbPaginationModule,
   ],
   exports: [
     WorkStudentComponent,

@@ -4,6 +4,7 @@
     <div class="row">
       <div class="col-md-1">
         <button
+          *ngIf="isTeacher"
           type="button btn-lg"
           class="btn btn-primary"
           (click)="openVerticallyCentered(content)"

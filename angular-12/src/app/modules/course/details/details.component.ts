@@ -10,6 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { IdentityService } from 'src/app/core/identity/identity.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { User } from 'src/app/core/user/user.type';
 
 @Component({
   selector: 'app-course-details',
@@ -18,6 +22,8 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class DetailsComponent implements OnInit {
 
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  private user: User | null = null;
   public course: Course | null = null;
   public assignments: Array<Assignment> = [];
   public editMode: boolean = false;
@@ -31,6 +37,7 @@ export class DetailsComponent implements OnInit {
   public createForm: FormGroup | null = null;
   private modal : NgbModalRef | null = null;
 
+  get isOwner() { return this.user !== null && this.course !== null && this.user.iduser === this.course.user.iduser}
 
   constructor(
     private route: ActivatedRoute,
@@ -39,12 +46,18 @@ export class DetailsComponent implements OnInit {
     protected toast: ToastrService,
     private assignmentService: AssignmentService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private identityService: IdentityService
     ) {
 
    }
 
   ngOnInit(): void {
+
+    this.identityService.identity$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(user => this.user = user);
+
     this.course = this.route.snapshot.data.initialData.course;
     this.assignments = this.route.snapshot.data.initialData.assignments;
     this. dataSource = new MatTableDataSource<Assignment>(this.assignments);

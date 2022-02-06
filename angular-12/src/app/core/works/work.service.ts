@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 import { BaseApiService } from "../base/baseapi.service";
 import { IdentityService } from "../identity/identity.service";
-import { Work, WorkCreateForm } from "./work.type";
+import { Work, WorkCreateForm, WorkSearchForm, WorkUpdateForm } from "./work.type";
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +21,20 @@ export class WorkService extends BaseApiService
     super(http, toast);
   }
 
-  public async getWorkOfAssignmentById(id: number): Promise<Work | null>{
-    return this.tryGetAsync<Work | null>(`/works/assignment/${id}`);
+  public getWorkOfAssignmentById(id: number): Observable<Work | null>{
+    return this.tryGet<Work | null>(`/works/assignment/${id}`);
   }
 
   public async createWork(form: WorkCreateForm): Promise<Work> {
     return this.tryPostAsync<WorkCreateForm, Work>(`/works`, form);
+  }
+
+  public async updateWork(form: WorkUpdateForm): Promise<Work> {
+    return this.tryPutAsync<WorkUpdateForm, Work>(`/works`, form);
+  }
+
+  public searchWork(form: WorkSearchForm): Observable<Array<Work>> {
+    return this.tryPost<WorkSearchForm, Array<Work>>(`/works/search`, form);
   }
 
 }

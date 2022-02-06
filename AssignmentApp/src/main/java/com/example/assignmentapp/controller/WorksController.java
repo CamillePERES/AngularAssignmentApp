@@ -93,4 +93,12 @@ public class WorksController extends BaseController {
             return new ResponseEntity<>(work, HttpStatus.OK);
         });
     }
+
+    @PostMapping(value="/search")
+    public ResponseEntity<List<WorkDto>> search(@RequestBody WorkSearchFormDto form) {
+        return tryHandle(() -> {
+            List<WorkDto> list = workService.getAllWorkPagination(form);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        });
+    }
 }

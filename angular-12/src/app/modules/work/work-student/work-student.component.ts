@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Assignment } from 'src/app/core/assignments/assignment.type';
 import { WorkService } from 'src/app/core/works/work.service';
 
 import { Work, WorkCreateForm } from 'src/app/core/works/work.type';
+import { WorkItem } from '../work-item/work-item.component';
 
 @Component({
   selector: 'app-work-student',
@@ -10,29 +12,35 @@ import { Work, WorkCreateForm } from 'src/app/core/works/work.type';
 })
 export class WorkStudentComponent implements OnInit {
 
-  @Input() idass: number | null = null;
-  private _work: Work | null = null;
-
-  get work() { return this._work; }
-  set work(value: Work | null) {
-    this._work = value;
-  }
+  @Input() idass: Assignment | null = null;
+  public work: WorkItem | null = null;
 
   constructor(
     private workService: WorkService
   ) { }
 
-  async ngOnInit(): Promise<void> {
-
+  ngOnInit(): void {
     if(this.idass){
-      this._work = await this.workService.getWorkOfAssignmentById(this.idass);
+      this.workService.getWorkOfAssignmentById(this.idass.idass)
+        .subscribe(work => this.work = { work: work, viewMode: work !== null})
+      //console.log('GET WORK STUDENT', this.work)
     }
-
-
   }
 
-  public submitCreate(value: WorkCreateForm): void {
+  public async submitCreate(value: WorkCreateForm): Promise<void> {
     console.log(value)
+
+    if(this.idass === null || this.work === null)
+      return;
+
+    try{
+      value.idAss = this.idass.idass;
+      this.work.work = await this.workService.createWork(value);
+      console.log(this.work)
+    }
+    catch(error){
+      console.log(error)
+    }
   }
 
 }

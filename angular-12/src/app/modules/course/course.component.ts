@@ -9,6 +9,8 @@ import { Subject } from 'rxjs';
 import { CourseService } from 'src/app/core/course/course.service';
 import { Course, CourseSearchForm } from 'src/app/core/course/course.type';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { IdentityService } from 'src/app/core/identity/identity.service';
+import { User } from 'src/app/core/user/user.type';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -18,6 +20,9 @@ const FILTER_PAG_REGEX = /[^0-9]/g;
   styleUrls: ['./course.component.css']
 })
 export class CourseComponent implements OnInit {
+
+  private user: User | null = null;
+  get isTeacher() { return this.user != null && this.user.role === 'TEACHER'}
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   searchInputCourse: FormControl = new FormControl();
@@ -45,12 +50,17 @@ export class CourseComponent implements OnInit {
     private courseService: CourseService,
     private routeur: Router,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private identityService: IdentityService
     ) {
 
   }
 
   ngOnInit(): void {
+
+    this.identityService.identity$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(user => this.user = user);
 
     this.searchInputCourse.setValue(this.paginationform.courseName);
     this.searchInputCourse.valueChanges

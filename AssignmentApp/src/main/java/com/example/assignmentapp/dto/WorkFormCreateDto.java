@@ -6,7 +6,6 @@ public class WorkFormCreateDto {
 
     private String name;
     private String description;
-    private int idUser;
     private int idAss;
 
     public String getName() {
@@ -23,14 +22,6 @@ public class WorkFormCreateDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
     }
 
     public int getIdAss() {

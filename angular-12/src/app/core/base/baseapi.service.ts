@@ -75,6 +75,9 @@ export abstract class BaseApiService {
     if(error instanceof HttpErrorResponse){
       this.toast.error(`Status : ${error.status} : ${error.error}`);
     }
+    else {
+      this.toast.error(`Status : ${error.status} : ${error.error}`);
+    }
     return error;
   }
 }

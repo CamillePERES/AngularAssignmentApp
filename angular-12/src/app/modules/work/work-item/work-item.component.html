@@ -1,4 +1,17 @@
-<div [formGroup]="form" class="border border-dark row">
+<div [formGroup]="form" class="border border-dark row" *ngIf="form">
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Student</span>
+      </div>
+      <input
+        disabled
+        type="text"
+        class="form-control"
+        [value]="workStudent"
+      />
+    </div>
+  </div>
   <div class="col-12">
     <div class="input-group">
       <div class="input-group-prepend">
@@ -32,7 +45,7 @@
         disabled
         type="text"
         class="form-control"
-        [value]="work ? work.status : ''"
+        [value]="workStatus"
       />
     </div>
   </div>
@@ -64,11 +77,33 @@
     </div>
   </div>
   <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Delivery date</span>
+      </div>
+      <input
+        disabled
+        type="text"
+        class="form-control"
+        [value]="workDelivery"
+      />
+    </div>
+  </div>
+  <div class="col-12">
     <div class="col-12 d-flex justify-content-center" *ngIf="mode === 0">
       <button
             type="button btn-lg"
             class="btn btn-primary"
             (click)="submitCreate()"
+          >
+            Submit
+          </button>
+    </div>
+    <div class="col-12 d-flex justify-content-center" *ngIf="mode === 1">
+      <button
+            type="button btn-lg"
+            class="btn btn-primary"
+            (click)="submitUpdate()"
           >
             Submit
           </button>
