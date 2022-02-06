@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { BaseApiService } from "../base/baseapi.service";
-import { Assignment, AssignmentForm } from "./assignment.type";
+import { Assignment, AssignmentForm, AssignmentFormUpdate } from "./assignment.type";
 
 @Injectable({
   providedIn: "root",
@@ -43,7 +43,7 @@ export class AssignmentService extends BaseApiService {
 
   public async createAssignmentAsync(form: AssignmentForm): Promise<Assignment | null>{
     try{
-      await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
+      return await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
     }catch(error:any){
       this.toast.error("Couldn't create the assignment","Assignment");
     }
@@ -56,6 +56,15 @@ export class AssignmentService extends BaseApiService {
     }catch(error:any){
       this.toast.error("Couldn't delete the assignment","Assignment");
     }
+  }
+
+  public async updateAssignment(form: AssignmentFormUpdate): Promise<Assignment | null>{
+    try{
+      return await this.http.post<Assignment>(`${environment.apiBaseUrl}/assignments/`, form).toPromise();
+    }catch(error){
+      this.toast.error("Couldn't edit the assignment","Assignment");
+    }
+    return null;
   }
 
   public getAssignmentById(id: number): Observable<Assignment> {

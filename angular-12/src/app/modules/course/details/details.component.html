@@ -8,38 +8,67 @@
         alt="Card image cap"
       />
       <div class="card-body">
-        <h2 class="card-title" *ngIf="!editMode">{{ course.name }}</h2>
-        <div class="input-group mb-3" *ngIf="editMode">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3">Name</span>
+        <div *ngIf="!editMode">
+          <h2 class="card-title">{{ course.name }}</h2>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3"
+                >Description</span
+              >
+            </div>
+            <input
+              [disabled]="true"
+              type="text"
+              [value]="course.description"
+              class="form-control"
+              id="basic-url"
+              aria-describedby="basic-addon3"
+            />
           </div>
-          <input
-            [disabled]="!editMode"
-            type="text"
-            [value]="course.name"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-          />
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3">Description</span>
+          <div class="d-flex" style="justify-content: right" *ngIf="!editMode">
+            <button class="btn btn-primary" (click)="goToEdit()">Edit</button>
           </div>
-          <input
-            [disabled]="!editMode"
-            type="text"
-            [value]="course.description"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-          />
         </div>
-        <div class="d-flex" style="justify-content: right;" *ngIf="!editMode">
-          <button class="btn btn-primary" (click)="goToEdit()">Edit</button>
-        </div>
-        <div class="d-flex" style="justify-content: right;" *ngIf="editMode">
-          <button class="btn btn-primary" (click)="saveUpdate()">Save</button>
+        <div *ngIf="editMode && editForm != null">
+          <form [formGroup]="editForm">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Name</span>
+              </div>
+              <input
+                type="text"
+                [value]="course.name"
+                class="form-control"
+                id="basic-url"
+                aria-describedby="basic-addon3"
+                [formControlName]="'name'"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3"
+                  >Description</span
+                >
+              </div>
+              <input
+                type="text"
+                [value]="course.description"
+                class="form-control"
+                id="basic-url"
+                aria-describedby="basic-addon3"
+                [formControlName]="'description'"
+              />
+            </div>
+            <div class="d-flex" style="justify-content: right" *ngIf="editMode">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="saveUpdate()"
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -52,47 +81,180 @@
         alt="Card image cap"
       />
       <div class="card-body">
-        <h2 class="card-title">Professor {{ course!.user.firstname }} {{ course!.user.name }}</h2>
+        <h2 class="card-title">
+          Professor {{ course!.user.firstname }} {{ course!.user.name }}
+        </h2>
       </div>
     </div>
   </div>
 
-
-  <div class="col-12" *ngIf="assignments" >
+  <div class="col-12" *ngIf="assignments">
     <h1>Assignments</h1>
-  </div>
-  <div class="col-md-12" *ngFor="let ass of assignments">
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">{{ ass.name }}</h2>
+    <div class="row">
+      <div class="col-1">
+        <button
+          type="button btn-lg"
+          class="btn btn-primary"
+          (click)="openVerticallyCentered(content)"
+        >
+          Create
+        </button>
       </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon3">Description</span>
+
+      <div class="col-12">
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let ass">{{ ass.name }}</td>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let ass">{{ ass.description }}</td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>To deliver on the</th>
+              <td mat-cell *matCellDef="let ass">{{ ass.date }}</td>
+            </ng-container>
+
+            <!-- Status Status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Is opened</th>
+              <td mat-cell *matCellDef="let ass">
+                <span
+                  class="dot"
+                  [ngStyle]="{
+                    'background-color': ass.isclosed ? 'red' : 'green'
+                  }"
+                ></span>
+              </td>
+            </ng-container>
+
+            <!-- Status Status -->
+            <ng-container matColumnDef="details">
+              <th mat-header-cell *matHeaderCellDef>Details</th>
+              <td mat-cell *matCellDef="let ass">
+                <button
+                  type="button btn-lg"
+                  class="btn btn-primary"
+                  (click)="viewDetailsOfTheSelectedAssignment(ass)"
+                >
+                  Details
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
         </div>
-        <input
-          [disabled]="true"
-          type="text"
-          [value]="ass.description"
-          class="form-control"
-          id="basic-url"
-          aria-describedby="basic-addon3"
-        />
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon3">To deliver on the:</span>
-        </div>
-        <input
-          [disabled]="true"
-          type="text"
-          [value]="ass.date"
-          class="form-control"
-          id="basic-url"
-          aria-describedby="basic-addon3"
-        />
       </div>
     </div>
   </div>
-
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Create assignment</h4>
+    <button
+      *ngIf="!createForm.disabled"
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="closeModal()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="createForm != null">
+    <form [formGroup]="createForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Name</span>
+            </div>
+            <input
+              type="text"
+              required
+              class="form-control"
+              name="name"
+              [formControlName]="'name'"
+            />
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-error *ngIf="createForm.get('name')?.hasError('required')">
+            Is required
+          </mat-error>
+        </div>
+        <div class="col-md-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Description</span>
+            </div>
+            <input
+              type="text"
+              required
+              class="form-control"
+              name="description"
+              [formControlName]="'description'"
+            />
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-error
+            *ngIf="createForm.get('description')?.hasError('required')"
+          >
+            Is required
+          </mat-error>
+        </div>
+        <div class="col-md-12">
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [formControlName]="'date'"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
+                type="button"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-error
+            *ngIf="createForm.get('date')?.hasError('required')"
+          >
+            Is required
+          </mat-error>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button btn-lg"
+      class="btn btn-primary"
+      (click)="createAssignment()"
+    >
+      Save
+    </button>
+    <mat-progress-spinner
+      *ngIf="createForm.disabled"
+      [diameter]="24"
+      [mode]="'indeterminate'"
+    ></mat-progress-spinner>
+  </div>
+</ng-template>

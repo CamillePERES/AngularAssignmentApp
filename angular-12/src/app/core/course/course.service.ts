@@ -55,6 +55,7 @@ export class CourseService extends BaseApiService {
   }
 
   public async updateCourse(form: CourseFormUpdate): Promise<Course | null>{
+    console.log(form);
     try{
       return await this.http.put<Course>(`${environment.apiBaseUrl}/courses/`, form).toPromise();
     }catch(error:any){

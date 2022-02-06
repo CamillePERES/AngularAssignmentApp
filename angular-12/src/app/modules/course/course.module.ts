@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
-import { NgbModalModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModalModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsResolver } from './resolver/course.details.resolver';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import {MatBadgeModule} from '@angular/material/badge';
 
 const routes: Routes = [
   {
@@ -36,7 +38,10 @@ const routes: Routes = [
     NgbModalModule,
     FormsModule,
     MatFormFieldModule,
+    MatTableModule,
     MatProgressSpinnerModule,
+    MatBadgeModule,
+    NgbDatepickerModule,
     ReactiveFormsModule
   ]
 })

@@ -22,6 +22,7 @@ export interface CourseSearchForm {
 }
 
 export interface CourseFormUpdate{
+  idCourse: number;
   name: string;
   description: string;
 }

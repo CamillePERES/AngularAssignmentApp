@@ -6,12 +6,19 @@ export interface AssignmentForm{
   date: Date;
   description: string;
 }
-//ajouter id de la matiere?
 
 export interface Assignment{
-  idass: number;
+  idass:number;
   name: string;
   date: Date;
   description: string;
+  isclosed: boolean;
   course: Course;
+}
+
+export interface AssignmentFormUpdate{
+  idAss: number;
+  name: string;
+  date: Date;
+  description: string;
 }
