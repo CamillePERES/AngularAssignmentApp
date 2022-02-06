@@ -1,0 +1,77 @@
+<div [formGroup]="form" class="border border-dark row">
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Name</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        [formControlName]="'name'"
+      />
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Description</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        [formControlName]="'description'"
+      />
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Status</span>
+      </div>
+      <input
+        disabled
+        type="text"
+        class="form-control"
+        [value]="work ? work.status : ''"
+      />
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Grade</span>
+      </div>
+      <input
+        type="number"
+        class="form-control"
+        name="grade"
+        min="0"
+        max="20"
+        [formControlName]="'grade'"
+      />
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">Comment</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        [formControlName]="'comment'"
+      />
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="col-12 d-flex justify-content-center" *ngIf="mode === 0">
+      <button
+            type="button btn-lg"
+            class="btn btn-primary"
+            (click)="submitCreate()"
+          >
+            Submit
+          </button>
+    </div>
+  </div>
+</div>
