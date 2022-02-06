@@ -58,7 +58,7 @@ export class AssignmentService extends BaseApiService {
     }
   }
 
-  getAssignmentById(id: any): import("rxjs").Observable<any> {
-    throw new Error("Method not implemented.");
+  public getAssignmentById(id: number): Observable<Assignment> {
+    return this.tryGet<Assignment>(`/assignments/${id}`);
   }
 }

@@ -1,1 +1,11 @@
-<p>details works!</p>
+<h1>Assignments</h1>
+<div class="row">
+  <div class="col-12" *ngIf="user && assignment">
+    <h1>Work</h1>
+    <app-work-student
+      *ngIf="isStudent"
+      [idass]="assignment.idass"
+    ></app-work-student>
+    <app-work-professor *ngIf="isTeacher"></app-work-professor>
+  </div>
+</div>

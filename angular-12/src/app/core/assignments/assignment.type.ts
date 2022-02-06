@@ -9,9 +9,9 @@ export interface AssignmentForm{
 //ajouter id de la matiere?
 
 export interface Assignment{
+  idass: number;
   name: string;
   date: Date;
   description: string;
-  work: Array<Work>;
   course: Course;
 }

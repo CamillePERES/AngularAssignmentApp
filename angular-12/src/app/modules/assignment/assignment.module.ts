@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssignmentComponent } from './assignment.component';
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { AssignmentDetailsResolver } from './resolver/assignment.resolver';
+import { WorkModule } from '../work/work.module';
 
 const routes: Routes = [
   {
@@ -19,7 +20,9 @@ const routes: Routes = [
     DetailsComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    WorkModule,
+    RouterModule.forChild(routes),
   ]
 })
 export class AssignmentModule { }

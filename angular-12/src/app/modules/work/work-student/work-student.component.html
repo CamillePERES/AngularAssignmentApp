@@ -1,1 +1,6 @@
-<p>work-student works!</p>
+<h1>Work Student</h1>
+<div class="row d-flex justify-content-center">
+  <div class="col-6 d-flex justify-content-center">
+    <app-work-item [(work)]="work" (submitcreate)="submitCreate($event)" [viewMode]="work !== null"></app-work-item>
+  </div>
+</div>

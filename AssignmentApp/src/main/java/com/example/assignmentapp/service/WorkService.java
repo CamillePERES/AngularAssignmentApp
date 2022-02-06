@@ -1,5 +1,6 @@
 package com.example.assignmentapp.service;
 
+import com.example.assignmentapp.dto.WorkDto;
 import com.example.assignmentapp.dto.WorkFormCreateDto;
 import com.example.assignmentapp.dto.WorkFormEvaluationDto;
 import com.example.assignmentapp.dto.WorkFormUpdateDto;
@@ -108,5 +109,11 @@ public class WorkService {
     @Transactional
     public List<WorkEntity> getWorksByIdAss(int idAssignment) {
         return workRepository.getAllWorksByIdAss(idAssignment);
+    }
+
+    public WorkDto getWorkStudentByIdAssignment(int id) {
+        int authIdUser = authenticationFacade.getUser().getIduser();
+        WorkEntity entity = workRepository.getWorkStudentByIdAssignment(id, authIdUser);
+        return entity == null ? null : new WorkDto(entity);
     }
 }

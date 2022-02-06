@@ -1,9 +1,6 @@
 package com.example.assignmentapp.controller;
 
-import com.example.assignmentapp.dto.WorkDto;
-import com.example.assignmentapp.dto.WorkFormCreateDto;
-import com.example.assignmentapp.dto.WorkFormEvaluationDto;
-import com.example.assignmentapp.dto.WorkFormUpdateDto;
+import com.example.assignmentapp.dto.*;
 import com.example.assignmentapp.model.WorkEntity;
 import com.example.assignmentapp.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +73,7 @@ public class WorksController extends BaseController {
         });
     }
 
-    @GetMapping("/assignment/{id}")
+    @GetMapping("/assignments/{id}")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<List<WorkDto>> getWorkByIdAss(@PathVariable("id") int id){
         return tryHandle(() -> {
@@ -85,6 +82,15 @@ public class WorksController extends BaseController {
                     .map(wk -> new WorkDto(wk))
                     .collect(Collectors.toList());
             return new ResponseEntity<>(workList, HttpStatus.OK);
+        });
+    }
+
+    @GetMapping("/assignment/{id}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<WorkDto> getWorkStudentByIdAssignment(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            WorkDto work = workService.getWorkStudentByIdAssignment(id);
+            return new ResponseEntity<>(work, HttpStatus.OK);
         });
     }
 }
