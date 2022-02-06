@@ -52,4 +52,6 @@ export class CourseComponent implements OnInit {
     this.routeur.navigate([`/course/details/${value.idcourse}`])
   }
 
+  
+
 }

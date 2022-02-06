@@ -79,4 +79,16 @@ public class AssignmentsController extends BaseController {
         });
     }
 
+    @GetMapping("/course/{id}")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
+    public ResponseEntity<List<AssignmentDto>> getAssignmentByIdCourse(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            List<AssignmentDto> assigmentList = assignmentService.getAssigmnentByIdCourse(id)
+                    .stream()
+                    .map(assi -> new AssignmentDto(assi))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(assigmentList, HttpStatus.OK);
+        });
+    }
+
 }

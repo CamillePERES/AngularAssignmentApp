@@ -1,10 +1,10 @@
 import { MatCardModule } from '@angular/material/card';
 import { CourseComponent } from './course.component';
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
-import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsResolver } from './resolver/course.details.resolver';
 
 const routes: Routes = [

@@ -13,6 +13,7 @@ import com.example.assignmentapp.util.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
@@ -116,5 +117,15 @@ public class AssignmentService {
         ass.setDate(assignmentFormUpdateDto.getDate());
 
         return assignmentRepository.saveAndFlush(ass);
+    }
+
+    /*public List<AssignmentEntity> getAssigmnentByIdCourse(int idCourse) {
+
+        Specification<AssignmentEntity> spec = (root, query, cb) -> cb.equal(root.get("courseEntity").get("idcourse"), idCourse);
+        return assignmentRepository.findAll(spec);
+    }*/
+
+    public List<AssignmentEntity> getAssigmnentByIdCourse(int idCourse) {
+       return assignmentRepository.getAllAssignmentByIdCourse(idCourse);
     }
 }
