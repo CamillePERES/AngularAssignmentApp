@@ -1,1 +1,22 @@
-<p>details works!</p>
+<p>Details</p>
+<div class="row">
+  <div class="col-4" *ngIf="course">
+    <div class="card">
+      <img class="card-img-top" src="assets/images/big/img1.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h2 class="card-title">{{ course.name }}</h2>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Description</span>
+          </div>
+          <input [disabled]="true" type="text" [value]="course.description" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Professor</span>
+          </div>
+          <input [disabled]="true" type="text" [value]="course.user.name" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+      </div>
+  </div>
+</div>

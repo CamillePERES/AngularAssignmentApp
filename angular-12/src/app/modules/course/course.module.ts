@@ -1,13 +1,21 @@
 import { MatCardModule } from '@angular/material/card';
 import { CourseComponent } from './course.component';
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { CourseDetailsResolver } from './resolver/course.details.resolver';
 
 const routes: Routes = [
   {
+    path: '',
+    component: CourseComponent,
+  },
+  {
+    path: 'details/:id',
+    resolve : { initialData: CourseDetailsResolver },
+    component: DetailsComponent,
   }
 ];
 
@@ -18,6 +26,8 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),
+    RouterModule,
     MatCardModule,
     NgbPaginationModule
   ]

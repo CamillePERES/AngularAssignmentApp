@@ -1,6 +1,7 @@
 import { CourseService } from './../../core/course/course.service';
 import { Component, OnInit } from '@angular/core';
 import { Course } from 'src/app/core/course/course.type';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -18,7 +19,10 @@ export class CourseComponent implements OnInit {
   get page() { return this._page; }
   set page(value: number) { this._page = value; }
 
-  constructor(private courseService: CourseService) {
+  constructor(
+    private courseService: CourseService,
+    private routeur: Router
+    ) {
 
   }
 
@@ -26,7 +30,7 @@ export class CourseComponent implements OnInit {
     this.getCourses();
   }
 
-  private async getCourses(){
+  private async getCourses(): Promise<void>{
     try {
       this.listCourses =  await this.courseService.getCoursesAsync();
       console.log("work");
@@ -35,16 +39,17 @@ export class CourseComponent implements OnInit {
     }
   }
 
-  formatInput(input: HTMLInputElement) {
+  public formatInput(input: HTMLInputElement): void {
     input.value = input.value.replace(FILTER_PAG_REGEX, '');
   }
 
-  selectPage(page: string) {
+  public selectPage(page: string): void {
     this.page = parseInt(page, 10) || 1;
   }
 
   public details(value: Course): void {
     console.log(value)
+    this.routeur.navigate([`/course/details/${value.idcourse}`])
   }
 
 }

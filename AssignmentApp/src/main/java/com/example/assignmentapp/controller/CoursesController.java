@@ -1,8 +1,6 @@
 package com.example.assignmentapp.controller;
 
-import com.example.assignmentapp.dto.CourseDto;
-import com.example.assignmentapp.dto.CourseFormCreateDto;
-import com.example.assignmentapp.dto.CourseFormUpdateDto;
+import com.example.assignmentapp.dto.*;
 import com.example.assignmentapp.model.CourseEntity;
 import com.example.assignmentapp.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +61,14 @@ public class CoursesController extends BaseController {
         return tryHandle(() -> {
             CourseEntity courseUpdated = courseService.updateCourse(courseFormUpdateDto);
             return new ResponseEntity<>(new CourseDto(courseUpdated), HttpStatus.OK);
+        });
+    }
+
+    @PostMapping(value="/search")
+    public ResponseEntity<PaginationResult<CourseDto>> search(@RequestBody CourseSearchForm form) {
+        return tryHandle(() -> {
+            PaginationResult<CourseDto> list = courseService.getAllCoursesPagination(form);
+            return new ResponseEntity<>(list, HttpStatus.OK);
         });
     }
 }

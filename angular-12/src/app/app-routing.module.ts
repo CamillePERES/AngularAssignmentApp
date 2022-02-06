@@ -51,7 +51,6 @@ export const Approutes: Routes = [
       {path:'', redirectTo: '/courses', pathMatch: 'full'},
       {
         path: 'course',
-        component: CourseComponent,
         loadChildren: () => import('./modules/course/course.module').then(m => m.CourseModule)
       }
     ]

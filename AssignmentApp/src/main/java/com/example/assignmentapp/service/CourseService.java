@@ -1,8 +1,7 @@
 package com.example.assignmentapp.service;
 
-import com.example.assignmentapp.dto.CourseFormCreateDto;
+import com.example.assignmentapp.dto.*;
 import com.example.assignmentapp.enumeration.CourseExceptionType;
-import com.example.assignmentapp.dto.CourseFormUpdateDto;
 import com.example.assignmentapp.exceptions.CourseException;
 import com.example.assignmentapp.exceptions.UserException;
 import com.example.assignmentapp.model.CourseEntity;
@@ -11,12 +10,19 @@ import com.example.assignmentapp.repositories.ICourseRepository;
 import com.example.assignmentapp.util.IAuthenticationFacade;
 import com.example.assignmentapp.util.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -93,5 +99,42 @@ public class CourseService {
         cs.setDescription(courseFormUpdateDto.getDescription());
 
         return courseRepository.saveAndFlush(cs);
+    }
+
+    public PaginationResult<CourseDto> getAllCoursesPagination(CourseSearchForm form) {
+
+        String courseName = form.getCourseName().trim();
+        String userName = form.getUserName().trim();
+        Pageable paging = PageRequest.of(form.getPage(), form.getPageSize());
+        Specification<CourseEntity> spec1 = (root, query, cb) -> cb.like(root.get("name"), "%"+courseName+"%");
+        Specification<CourseEntity> spec2 = (root, query, cb) -> cb.like(root.get("user").get("name"), "%"+userName+"%");
+        Specification<CourseEntity> spec3 = (root, query, cb) -> cb.like(root.get("user").get("firstname"), "%"+userName+"%");
+        Specification<CourseEntity> spec4 = (root, query, cb) -> cb.like(root.get("user").get("login"), "%"+userName+"%");
+        Specification<CourseEntity> course = null;
+        Specification<CourseEntity> user = null;
+
+        if(!courseName.isEmpty()){
+            course = Specification.where(spec1);
+        }
+
+        if(!userName.isEmpty()){
+            user = Specification.where(spec2).or(spec3).or(spec4);
+        }
+
+        Specification<CourseEntity> finalSpec = course != null ?
+                user != null ? course.and(user) : course :
+                user;
+
+        Page<CourseEntity> entities = courseRepository.findAll(finalSpec, paging);
+        List<CourseDto> courses = entities.get().map(CourseDto::new).collect(Collectors.toList());
+
+        PaginationResult<CourseDto> results = new PaginationResult<>();
+        results.setPage(form.getPage());
+        results.setPageSize(form.getPageSize());
+        results.setTotal((int) courseRepository.count());
+        results.setResults(courses);
+        results.setTotalPage(courses.size());
+
+        return results;
     }
 }

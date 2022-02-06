@@ -3,13 +3,17 @@ import { HttpClient } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import { Injectable } from '@angular/core';
 import { environment } from "src/environments/environment";
+import { Observable } from 'rxjs';
+import { BaseApiService } from '../base/baseapi.service';
 
 @Injectable({
   providedIn: "root",
 })
+export class CourseService extends BaseApiService {
 
-export class CourseService {
-  constructor(private http: HttpClient, protected toast: ToastrService) {}
+  constructor(http: HttpClient, toast: ToastrService) {
+    super(http, toast)
+  }
 
   public async getCoursesAsync(): Promise<Array<Course>> {
     try {
@@ -22,9 +26,13 @@ export class CourseService {
     return [];
   }
 
+  public getCourseById(id: number): Observable<Course> {
+    return this.tryGet<Course>(`/courses/${id}`);
+  }
+
   public async getCourseByIdAsync(id: number): Promise<void> {
     try {
-      await this.http.get<Course>(`${environment.apiBaseUrl}/courses/`+ id).toPromise();
+      await this.http.get<Course>(`${environment.apiBaseUrl}/courses/${id}`).toPromise();
     } catch (erroer: any) {
       this.toast.error("Couldn't display the course","Course");
     }
