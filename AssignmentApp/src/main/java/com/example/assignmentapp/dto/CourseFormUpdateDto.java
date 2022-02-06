@@ -7,11 +7,11 @@ public class CourseFormUpdateDto {
     private String name;
     private String description;
 
-    public int getIdcourse() {
+    public int getIdCourse() {
         return idCourse;
     }
 
-    public void setIdcourse(int idCourse) {
+    public void setIdCourse(int idCourse) {
         this.idCourse = idCourse;
     }
 

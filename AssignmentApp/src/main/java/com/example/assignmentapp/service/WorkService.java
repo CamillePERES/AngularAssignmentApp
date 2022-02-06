@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,13 +54,13 @@ public class WorkService {
     }
 
     @Transactional
-    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, WorkException, AssignmentException {
+    public WorkEntity createWork(WorkFormCreateDto workFormCreateDto) throws UserException, AssignmentException {
 
         //on recupere l'idass et l'iduser passes dans le formulaire
         UserEntity user = userService.getUserById(workFormCreateDto.getIdUser());
         AssignmentEntity assignment = assignmentService.getAssigmentById(workFormCreateDto.getIdAss());
 
-        return workRepository.save(new WorkEntity(workFormCreateDto.getName(), workFormCreateDto.getDescription(), 0, "",  EnumWorkStatus.Submitted.name(), user, assignment));
+        return workRepository.save(new WorkEntity(workFormCreateDto, user, assignment));
     }
 
     @Transactional
