@@ -37,4 +37,8 @@ export class WorkService extends BaseApiService
     return this.tryPost<WorkSearchForm, Array<Work>>(`/works/search`, form);
   }
 
+  public getWorkOfUserById(id: number): Observable<Array<Work>> {
+    return this.tryGet<Array<Work>>(`/works/user/${id}`);
+  }
+
 }

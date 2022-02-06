@@ -138,4 +138,8 @@ public class WorkService {
         Specification<WorkEntity> ofAss = (root, query, cb) -> cb.equal(root.get("assignmentEntity").get("idass"), form.getIdAss());
         return workRepository.findAll(Specification.where(filterStatus).and(ofAss)).stream().map(WorkDto::new).collect(Collectors.toList());
     }
+
+    public List<WorkEntity> getWorksByIdUser(int idUser){
+       return workRepository.getAllWorksByIdUser(idUser);
+    }
 }

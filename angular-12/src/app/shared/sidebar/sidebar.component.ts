@@ -1,5 +1,6 @@
+import { IdentityService } from './../../core/identity/identity.service';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { ROUTES } from './menu-items';
+import { ROUTESSTUDENT, ROUTESTEACHER } from './menu-items';
 import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,11 +26,19 @@ export class SidebarComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private identityService :IdentityService
   ) {}
 
   // End open close
   ngOnInit() {
-    this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
+    this.identityService.identity$.subscribe(user => {
+      if(user!.role === "TEACHER"){
+        this.sidebarnavItems = ROUTESTEACHER.filter(sidebarnavItem => sidebarnavItem);
+      }
+      else if (user!.role === "STUDENT"){
+        this.sidebarnavItems = ROUTESSTUDENT.filter(sidebarnavItem => sidebarnavItem);
+      }
+    })
   }
 }

@@ -48,6 +48,11 @@ export const Approutes: Routes = [
       {
         path: 'course',
         loadChildren: () => import('./modules/course/course.module').then(m => m.CourseModule)
+      },
+      {path:'', redirectTo: '/works', pathMatch: 'full'},
+      {
+        path: 'work',
+        loadChildren: () => import('./modules/work/work.module').then(m => m.WorkModule)
       }
     ]
   },

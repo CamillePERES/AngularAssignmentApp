@@ -1,0 +1,112 @@
+<h1>My work</h1>
+
+<div class="row d-flex justify-content-center">
+
+  <div class="col-md-3 list-work">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center"><h1>Submitted</h1></div>
+      <div class="col-12" *ngFor="let work of asssub">
+        <div class="col-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Name</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.name"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Assignment</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.assignment.name"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Course</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.assignment.course.name"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 list-work">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center"><h1>Evaluated</h1></div>
+      <div class="col-12" *ngFor="let work of asseva">
+        <div class="col-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Name</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.name"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Assignment</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.assignment.name"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Course</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.assignment.course.name"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Grade</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.grade"
+            />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Comment</span>
+            </div>
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              [value]="work.comment"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

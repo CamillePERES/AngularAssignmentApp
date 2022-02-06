@@ -101,4 +101,29 @@ public class WorksController extends BaseController {
             return new ResponseEntity<>(list, HttpStatus.OK);
         });
     }
+
+    /*
+    * @GetMapping("/course/{id}")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT')")
+    public ResponseEntity<List<AssignmentDto>> getAssignmentByIdCourse(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            List<AssignmentDto> assigmentList = assignmentService.getAssigmnentByIdCourse(id)
+                    .stream()
+                    .map(assi -> new AssignmentDto(assi))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(assigmentList, HttpStatus.OK);
+        });
+    }*/
+
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity <List<WorkDto>> getWorksByIdUser(@PathVariable("id") int id){
+        return tryHandle(() -> {
+            List<WorkDto> worksList = workService.getWorksByIdUser(id)
+                    .stream()
+                    .map(wk -> new WorkDto(wk))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(worksList, HttpStatus.OK);
+        });
+    }
 }
