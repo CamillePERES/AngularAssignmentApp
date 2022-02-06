@@ -9,6 +9,7 @@ public class AssignmentFormUpdateDto {
     private String name;
     private String description;
     private Date date;
+    private boolean isclosed;
 
     public int getIdAss() {
         return idAss;
@@ -40,5 +41,13 @@ public class AssignmentFormUpdateDto {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isIsclosed() {
+        return isclosed;
+    }
+
+    public void setIsclosed(boolean isclosed) {
+        this.isclosed = isclosed;
     }
 }

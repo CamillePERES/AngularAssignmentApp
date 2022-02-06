@@ -10,6 +10,7 @@ import { Assignment } from 'src/app/core/assignments/assignment.type';
 import { IdentityService } from 'src/app/core/identity/identity.service';
 
 import { User } from 'src/app/core/user/user.type';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-assignments-details',
@@ -21,6 +22,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   public editAssignmentForm: FormGroup | null = null;
   public editMode: boolean = false;
+  public isChecked = true;
 
   public user: User | null = null;
   public assignment: Assignment | null = null;
@@ -71,7 +73,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.editAssignmentForm = this.formBuilder.group({
         name:[this.assignment.name, Validators.required],
         description:[this.assignment.description, Validators.required],
-        date:[datef, Validators.required]
+        date:[datef, Validators.required],
+        isclosed: [this.assignment.isclosed, Validators.required]
       });
   }
 
@@ -83,7 +86,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
           idAss: this.assignment!.idass,
           name:this.editAssignmentForm!.value.name,
           description: this.editAssignmentForm!.value.description,
-          date: new Date(`${value.date.year}-${value.date.month}-${value.date.day}`)
+          date: new Date(`${value.date.year}-${value.date.month}-${value.date.day}`),
+          isclosed : this.assignment!.isclosed
         })
 
       }catch(error){
@@ -91,5 +95,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }
       this.editAssignmentForm = null;
   }
+
+  public onChange(){
+    console.log(this.assignment!.isclosed)
+    this.assignment!.isclosed = !this.assignment!.isclosed;
+  }
+
 
 }

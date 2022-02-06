@@ -7,6 +7,7 @@ import { DetailsComponent } from './details/details.component';
 import { AssignmentDetailsResolver } from './resolver/assignment.resolver';
 import { WorkModule } from '../work/work.module';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 const routes: Routes = [
   {
@@ -27,6 +28,7 @@ const routes: Routes = [
     NgbDatepickerModule,
     RouterModule.forChild(routes),
     FormsModule,
+    MatSlideToggleModule,
     ReactiveFormsModule
   ]
 })

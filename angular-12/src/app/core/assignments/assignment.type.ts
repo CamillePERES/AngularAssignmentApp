@@ -22,4 +22,5 @@ export interface AssignmentFormUpdate{
   name: string;
   date: Date;
   description: string;
+  isclosed: boolean;
 }
