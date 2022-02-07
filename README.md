@@ -1,1 +1,1 @@
-AngularAssignmentApp
+#Les fonctionnalités du projet: 
