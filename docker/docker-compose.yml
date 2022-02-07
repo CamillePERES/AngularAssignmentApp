@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
+
   mysql:
-    container_name: mySQL
     build: ./
     ports:
       - 3306:3306
@@ -13,3 +13,25 @@ services:
       - MYSQL_PASSWORD=An0thrS3crt
       - MYSQL_USER=citizix_user
       - MYSQL_DATABASE=assignment_db
+
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: ./../AssignmentApp
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/assignment_db
+    ports:
+      - 8081:8081
+    depends_on:
+      - mysql
+
+  front:
+    image: ${DOCKER_REGISTRY-}front
+    build:
+      context: ./../angular-12
+      dockerfile: Dockerfile
+    ports:
+      - 4200:4200
+    links:
+        - api
